@@ -1,5 +1,6 @@
 package mz.co.checkmob.api.company;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import mz.co.checkmob.api.company.domain.Company;
 import mz.co.checkmob.api.company.domain.CompanyMapper;
 import mz.co.checkmob.api.company.domain.UpdateCompanyCommand;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -48,12 +50,10 @@ public class CompanyControllerTest extends BaseCompanyTest{
     @Test
     @WithMockUser
     void shouldShowCompanyDetails() throws Exception {
-        // Given
         Company company = getAnyCompany();
-        given(companyService.fetchCompany(any())).willReturn(CompanyMapper.INSTANCE.mapToJson(getAnyCompany()));
-        // When
+        company.setId(1L);
+        given(companyService.fetchCompany(any())).willReturn(CompanyMapper.INSTANCE.mapToJson(company));
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/companies/%s", ThreadLocalRandom.current().nextLong(10,100))));
-        // Then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(company.getId().toString()));
     }
@@ -62,8 +62,13 @@ public class CompanyControllerTest extends BaseCompanyTest{
     @WithMockUser
     void shouldCreateCompany() throws Exception {
         Company company = getAnyCompany();
-        given(companyService.create(any())).willReturn(CompanyMapper.INSTANCE.mapToJson(getAnyCompany()));
-        ResultActions perform = mockMvc.perform(post("/api/v1/companies", getCreateCompanyCommand()));
+        company.setId(1L);
+        given(companyService.create(any())).willReturn(CompanyMapper.INSTANCE.mapToJson(company));
+        String data = new ObjectMapper().writeValueAsString(getCreateCompanyCommand());
+        ResultActions perform = mockMvc.perform(post("/api/v1/companies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(data));
         perform
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").isNotEmpty());
@@ -83,6 +88,6 @@ public class CompanyControllerTest extends BaseCompanyTest{
     @WithMockUser
     void shouldDeleteCompany() throws Exception {
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.delete(String.format("/api/v1/companies/%s", ThreadLocalRandom.current().nextLong(10,100))));
-        result.andExpect(status().isOk());
+        result.andExpect(status().isGone());
     }
 }
