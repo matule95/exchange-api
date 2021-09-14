@@ -34,11 +34,6 @@ public class UserIntegrationTests extends BaseUserTests {
     @Autowired
     static UserRepository userRepository;
 
-    @AfterAll
-    static void afterAll() {
-        userRepository.deleteAll();
-    }
-
     @Test
     @Order(1)
     void itShouldCreateUser() throws Exception {
