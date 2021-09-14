@@ -1,0 +1,20 @@
+version: '3.4'
+services:
+  db:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: checkmob
+    volumes:
+      - postgres_sdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  smtp:
+    image: mailhog/mailhog:v1.0.0
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  postgres_sdata:
