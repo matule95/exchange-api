@@ -48,6 +48,7 @@ public class EndpointController {
     }
 
     @GetMapping
+    @ApiOperation("Fetches all Endpoints")
     public ResponseEntity<Page<EndpointJson>> getAll( Pageable pageable) {
         return ResponseEntity.ok(EndpointMapper.INSTANCE.mapToJson(endpointService.findAll(pageable)));
     }
