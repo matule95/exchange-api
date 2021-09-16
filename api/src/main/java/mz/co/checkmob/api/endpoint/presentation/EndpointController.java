@@ -50,7 +50,8 @@ public class EndpointController {
     @GetMapping
     @ApiOperation("Fetch all Endpoints")
     public ResponseEntity<Page<EndpointJson>> getAll( Pageable pageable) {
-        return ResponseEntity.ok(EndpointMapper.INSTANCE.mapToJson(endpointService.findAll(pageable)));
+        Page<Endpoint> endpoints = endpointService.findAll(pageable);
+        return ResponseEntity.ok(EndpointMapper.INSTANCE.mapToJson(endpoints));
     }
 
     @DeleteMapping("/{id}")

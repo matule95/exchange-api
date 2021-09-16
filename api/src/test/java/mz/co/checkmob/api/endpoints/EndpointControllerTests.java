@@ -8,7 +8,6 @@ import mz.co.checkmob.api.endpoint.domain.EndpointMapper;
 import mz.co.checkmob.api.endpoint.domain.UpdateEndpointCommand;
 import mz.co.checkmob.api.endpoint.service.EndpointService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +20,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,17 +29,18 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser
+@Transactional
 public class EndpointControllerTests extends AbstractTest {
-
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    EndpointService endpointService;
+    private EndpointService endpointService;
 
     @Test
     void itShouldCreateEndpoint() throws Exception {
@@ -48,14 +49,14 @@ public class EndpointControllerTests extends AbstractTest {
         String data = new ObjectMapper().writeValueAsString(command);
 
         // when
+        when(endpointService.create(command)).thenReturn(EndpointMapper.INSTANCE.mapToModel(command));
         ResultActions response = mvc.perform(post("/api/v1/endpoints")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(data));
 
         // then
-        response.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNotEmpty());
+        response.andExpect(status().isCreated());
     }
 
     @Test
@@ -63,8 +64,13 @@ public class EndpointControllerTests extends AbstractTest {
         // given
         UpdateEndpointCommand command = anyUpdateEndpointCommand();
         String data = new ObjectMapper().writeValueAsString(command);
+        Endpoint endpoint = new Endpoint();
+        endpoint.setId(command.getId());
+        endpoint.setDataReader(command.getDataReader());
+        endpoint.setUrl(command.getUrl());
 
         // when
+        when(endpointService.update(command)).thenReturn(endpoint);
         ResultActions response = mvc.perform(put("/api/v1/endpoints")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -77,13 +83,13 @@ public class EndpointControllerTests extends AbstractTest {
 
     @Test
     void  itShouldGetEndpointById() throws Exception {
-
+        //given
         Endpoint endpoint = anyEndpoint();
-        Mockito.when(endpointService.findById(any())).thenReturn(endpoint);
+        String url = String.format("/api/v1/endpoints/%s",endpoint.getId());
 
         // when
-        ResultActions response = mvc.perform(get("/api/v1/endpoints/1")
-                .contentType(MediaType.APPLICATION_JSON));
+        when(endpointService.findById(endpoint.getId())).thenReturn(endpoint);
+        ResultActions response = mvc.perform(get(url));
 
         // then
         response.andExpect(status().isOk())
@@ -92,28 +98,23 @@ public class EndpointControllerTests extends AbstractTest {
 
     @Test
     void  itShouldGetPageOfEndpoints() throws Exception {
+        List<Endpoint> endpoints = new ArrayList<>();
+        endpoints.add(anyEndpoint());
+        endpoints.add(anyEndpoint());
+        endpoints.add(anyEndpoint());
+        Page<Endpoint> page = new PageImpl<>(endpoints);
 
-        List<Endpoint> list = new ArrayList();
-        list.add(anyEndpoint());
-        list.add(anyEndpoint());
-        list.add(anyEndpoint());
-        list.add(anyEndpoint());
-        Page<Endpoint> page = new PageImpl<>(list,Pageable.unpaged(),list.size());
-        Mockito.when(endpointService.findAll(any())).thenReturn(page);
         // when
-        ResultActions response = mvc.perform(get("/api/v1/endpoints/")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON));
-
+        when(endpointService.findAll(any())).thenReturn(page);
+        ResultActions response = mvc.perform(get("/api/v1/endpoints"));
         // then
-        response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").isNotEmpty());
+        response.andExpect(status().isOk());
     }
 
     @Test
     void itShouldDeleteASingleEndpoint() throws Exception {
         // when
-        ResultActions result = mvc.perform(MockMvcRequestBuilders.delete("/api/v1/endpoints/1"));
+        ResultActions result = mvc.perform(MockMvcRequestBuilders.delete(String.format("/api/v1/endpoints/%s", anyEndpoint().getId())));
 
         // then
         result.andExpect(status().isNoContent());

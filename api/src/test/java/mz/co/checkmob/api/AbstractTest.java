@@ -30,7 +30,7 @@ public abstract class AbstractTest {
   protected Endpoint anyEndpoint() {
     Endpoint command = new Endpoint();
     command.setId(ThreadLocalRandom.current().nextLong(10,100));
-    command.setDataReader(faker.options().option(Map.of(faker.company().name(), faker.company().industry())));
+    command.setDataReader(faker.options().option(Map.of(faker.internet().slug(), faker.company().name())));
     command.setUrl(faker.internet().url());
     command.setUpdatedAt(LocalDateTime.now());
     command.setCreatedAt(LocalDateTime.now());
@@ -39,7 +39,7 @@ public abstract class AbstractTest {
 
   protected CreateEndpointCommand anyCreateEndpointCommand() {
     CreateEndpointCommand command = new CreateEndpointCommand();
-    command.setDataReader(faker.options().option(Map.of(faker.company().name(), faker.company().industry())));
+    command.setDataReader(faker.options().option(Map.of(faker.internet().slug(), faker.company().name())));
     command.setUrl(faker.internet().url());
     return command;
   }
@@ -47,7 +47,7 @@ public abstract class AbstractTest {
   protected UpdateEndpointCommand anyUpdateEndpointCommand() {
     UpdateEndpointCommand command = new UpdateEndpointCommand();
     command.setId(ThreadLocalRandom.current().nextLong(10,100));
-    command.setDataReader(faker.options().option(Map.of(faker.company().name(), faker.company().industry())));
+    command.setDataReader(faker.options().option(Map.of(faker.internet().slug(), faker.company().name())));
     command.setUrl(faker.internet().url());
     return command;
   }
