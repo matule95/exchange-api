@@ -78,10 +78,18 @@ public class CompanyControllerTest extends BaseCompanyTest{
     @WithMockUser
     void shouldUpdateCompany () throws Exception {
         Company company = getAnyCompany();
+        company.setId(1L);
         UpdateCompanyCommand command = getAnyUpdateCompanyCommand();
-        String url = String.format("/api/v1/companies/%s", 1L);
-        when(companyService.update(any(),any())).thenReturn(CompanyMapper.INSTANCE.mapToJson(getAnyCompany()));
-        ResultActions result = mockMvc.perform(put(url, command));
+        String url = String.format("/api/v1/companies/%s", company.getId());
+        String data = new ObjectMapper().writeValueAsString(command);
+        when(companyService.update(any(),any())).thenReturn(CompanyMapper.INSTANCE.mapToJson(company));
+        ResultActions result = mockMvc.perform(put(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(data));
+        result
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").isNotEmpty());
     }
 
     @Test
