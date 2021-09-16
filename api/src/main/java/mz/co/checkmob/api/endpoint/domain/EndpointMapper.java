@@ -22,8 +22,8 @@ public abstract class EndpointMapper {
     public abstract EndpointJson mapToJson(Endpoint endpoint);
     public abstract List<EndpointJson> mapToJson(List<Endpoint> endpoints);
 
-    public Page<EndpointJson> mapToJson(Page<Endpoint> users) {
-        return new PageImpl<>(mapToJson(users.getContent()), users.getPageable(), users.getTotalElements());
+    public Page<EndpointJson> mapToJson(Page<Endpoint> endpoints) {
+        return new PageImpl<>(mapToJson(endpoints.getContent()), endpoints.getPageable(), endpoints.getTotalElements());
     }
 
 }

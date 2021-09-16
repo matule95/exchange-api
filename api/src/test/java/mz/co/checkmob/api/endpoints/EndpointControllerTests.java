@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import mz.co.checkmob.api.AbstractTest;
 import mz.co.checkmob.api.endpoint.domain.CreateEndpointCommand;
 import mz.co.checkmob.api.endpoint.domain.Endpoint;
+import mz.co.checkmob.api.endpoint.domain.EndpointMapper;
 import mz.co.checkmob.api.endpoint.domain.UpdateEndpointCommand;
 import mz.co.checkmob.api.endpoint.service.EndpointService;
 import org.junit.jupiter.api.Test;
@@ -12,11 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -85,6 +92,14 @@ public class EndpointControllerTests extends AbstractTest {
 
     @Test
     void  itShouldGetPageOfEndpoints() throws Exception {
+
+        List<Endpoint> list = new ArrayList();
+        list.add(anyEndpoint());
+        list.add(anyEndpoint());
+        list.add(anyEndpoint());
+        list.add(anyEndpoint());
+        Page<Endpoint> page = new PageImpl<>(list,Pageable.unpaged(),list.size());
+        Mockito.when(endpointService.findAll(any())).thenReturn(page);
         // when
         ResultActions response = mvc.perform(get("/api/v1/endpoints/")
                 .accept(MediaType.APPLICATION_JSON)
