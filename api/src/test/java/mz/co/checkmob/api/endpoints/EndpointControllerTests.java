@@ -3,16 +3,22 @@ package mz.co.checkmob.api.endpoints;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mz.co.checkmob.api.AbstractTest;
 import mz.co.checkmob.api.endpoint.domain.CreateEndpointCommand;
+import mz.co.checkmob.api.endpoint.domain.Endpoint;
 import mz.co.checkmob.api.endpoint.domain.UpdateEndpointCommand;
+import mz.co.checkmob.api.endpoint.service.EndpointService;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,8 +27,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser
 public class EndpointControllerTests extends AbstractTest {
+
     @Autowired
     private MockMvc mvc;
+
+    @MockBean
+    EndpointService endpointService;
 
     @Test
     void itShouldCreateEndpoint() throws Exception {
@@ -60,13 +70,17 @@ public class EndpointControllerTests extends AbstractTest {
 
     @Test
     void  itShouldGetEndpointById() throws Exception {
+
+        Endpoint endpoint = anyEndpoint();
+        Mockito.when(endpointService.findById(any())).thenReturn(endpoint);
+
         // when
         ResultActions response = mvc.perform(get("/api/v1/endpoints/1")
                 .contentType(MediaType.APPLICATION_JSON));
 
         // then
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andExpect(jsonPath("$.id").value(endpoint.getId()));
     }
 
     @Test
