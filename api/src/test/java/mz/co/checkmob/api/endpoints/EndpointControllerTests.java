@@ -34,7 +34,6 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser
-@Transactional
 public class EndpointControllerTests extends AbstractTest {
     @Autowired
     private MockMvc mvc;
