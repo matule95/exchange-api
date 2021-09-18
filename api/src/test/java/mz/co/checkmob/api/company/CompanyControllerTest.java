@@ -96,6 +96,6 @@ public class CompanyControllerTest extends BaseCompanyTest{
     @WithMockUser
     void shouldDeleteCompany() throws Exception {
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.delete(String.format("/api/v1/companies/%s", ThreadLocalRandom.current().nextLong(10,100))));
-        result.andExpect(status().isGone());
+        result.andExpect(status().isOk());
     }
 }

@@ -52,6 +52,6 @@ public class CompanyController {
     @ApiOperation("Delete Company")
     public ResponseEntity<?> deleteCompany(@PathVariable Long id) {
             companyService.deleteById(id);
-            return ResponseEntity.status(HttpStatus.GONE).build();
+            return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
