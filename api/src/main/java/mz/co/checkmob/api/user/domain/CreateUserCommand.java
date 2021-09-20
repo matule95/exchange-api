@@ -26,4 +26,9 @@ public class CreateUserCommand {
     @NotEmpty
     @Size(min = 5)
     private String password;
+
+    @NotNull
+    @NotEmpty
+    @Size(min = 5)
+    private String passwordConfirmation;
 }

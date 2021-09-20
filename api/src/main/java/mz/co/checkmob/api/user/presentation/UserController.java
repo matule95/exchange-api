@@ -9,6 +9,7 @@ import mz.co.checkmob.api.user.domain.User;
 import mz.co.checkmob.api.user.domain.UserMapper;
 import mz.co.checkmob.api.user.domain.query.UserQuery;
 import mz.co.checkmob.api.user.service.UserService;
+import mz.co.checkmob.api.utils.ResourceResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -40,7 +43,8 @@ public class UserController {
             User response = userService.findById(id);
             return ResponseEntity.ok(UserMapper.INSTANCE.mapToJson(response));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ResourceResponse.error(e.getMessage(), HttpStatus.NOT_FOUND.toString()));
         }
     }
 
@@ -53,7 +57,7 @@ public class UserController {
     @PutMapping
     @ApiOperation("Update User Details")
     public ResponseEntity<UserJson> update(@RequestBody @Valid UpdateUserCommand command) {
-        return  ResponseEntity.ok(null);
+        return  ResponseEntity.ok(UserMapper.INSTANCE.mapToJson(userService.update(command)));
     }
 
     @DeleteMapping("/{id}")

@@ -24,8 +24,7 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests extends BaseUserTests {
@@ -100,6 +99,7 @@ public class UserServiceTests extends BaseUserTests {
         assertThatExceptionOfType(EntityNotFoundException.class)
                 .isThrownBy(() -> underTest.findById(any()))
                 .withMessage("O usuário pretendido não foi encontrado.");
+        verify(userRepository, never()).deleteById(any());
     }
 
     @Test
