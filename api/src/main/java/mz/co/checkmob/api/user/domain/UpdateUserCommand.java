@@ -18,7 +18,4 @@ public class UpdateUserCommand {
     private String name;
 
     @NotNull private UserRole role;
-    @NotNull private Long delegationId;
-    @NotNull private Long departmentId;
-
 }
