@@ -1,5 +1,6 @@
 package mz.co.checkmob.api.user;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import mz.co.checkmob.api.user.domain.CreateUserCommand;
 import mz.co.checkmob.api.user.domain.query.UserQuery;
 import mz.co.checkmob.api.user.presentation.UserController;
@@ -16,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import javax.persistence.EntityNotFoundException;
+
+import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -67,11 +70,15 @@ public class UserControllerTests extends BaseUserTests {
     @Test
     void  itShouldGetNotFoundStatusIfUserDoesNotExist() {
         // when
-        when(userService.findById(any())).thenThrow(EntityNotFoundException.class);
+        String expectedMessage = "O usuário pretendido não foi encontrado.";
+        when(userService.findById(any())).thenThrow(new EntityNotFoundException(expectedMessage));
         ResponseEntity<Object> expected = underTest.getUserById(any());
+        Map<String, String> errorResponse = new ObjectMapper().convertValue(expected.getBody(), Map.class);
 
         // then
         assertThat(expected.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(errorResponse.get("code")).isEqualTo(HttpStatus.NOT_FOUND.toString());
+        assertThat(errorResponse.get("error")).isEqualTo(expectedMessage);
     }
 
     @Test
