@@ -7,6 +7,7 @@ import mz.co.checkmob.api.company.domain.CreateCompanyCommand;
 import mz.co.checkmob.api.company.domain.UpdateCompanyCommand;
 import mz.co.checkmob.api.company.domain.query.CompanyQuery;
 import mz.co.checkmob.api.company.service.CompanyServiceImpl;
+import mz.co.checkmob.api.utils.PageJson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -38,8 +39,8 @@ public class CompanyController {
 
     @GetMapping
     @ApiOperation("Fetch All Companies")
-    public ResponseEntity<Page<CompanyJson>> getCompanies(CompanyQuery companyQuery, Pageable pageable) {
-        return ResponseEntity.ok(companyService.fetchCompanies(pageable,companyQuery));
+    public ResponseEntity<PageJson<CompanyJson>> getCompanies(CompanyQuery companyQuery, Pageable pageable) {
+        return ResponseEntity.ok(PageJson.of(companyService.fetchCompanies(pageable,companyQuery)));
     }
 
     @PutMapping("/{id}")

@@ -9,6 +9,7 @@ import mz.co.checkmob.api.user.domain.User;
 import mz.co.checkmob.api.user.domain.UserMapper;
 import mz.co.checkmob.api.user.domain.query.UserQuery;
 import mz.co.checkmob.api.user.service.UserService;
+import mz.co.checkmob.api.utils.PageJson;
 import mz.co.checkmob.api.utils.ResourceResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin
@@ -49,9 +51,9 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserJson>> getUsersPage(UserQuery userQuery, Pageable pageable) {
-        Page<User> users = userService.fetchPaged(pageable, userQuery);
-        return ResponseEntity.ok(UserMapper.INSTANCE.mapToJson(users));
+    public ResponseEntity<PageJson<UserJson>> getUsersPage(UserQuery userQuery, Pageable pageable) {
+       Page<User> users = userService.fetchPaged(pageable, userQuery);
+        return ResponseEntity.ok(PageJson.of(UserMapper.INSTANCE.mapToJson(users)));
     }
 
     @PutMapping
