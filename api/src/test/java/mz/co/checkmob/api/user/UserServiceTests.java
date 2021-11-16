@@ -146,7 +146,7 @@ public class UserServiceTests extends BaseUserTests {
         when(userRepository.findById(command.getId())).thenReturn(Optional.of(userUpdateMock));
         when(userRepository.save(any())).thenReturn(updatedMock);
 
-        User expected = underTest.update(command);
+        User expected = underTest.update(command,command.getId());
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
 
         // then

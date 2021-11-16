@@ -56,10 +56,10 @@ public class UserController {
         return ResponseEntity.ok(PageJson.of(UserMapper.INSTANCE.mapToJson(users)));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @ApiOperation("Update User Details")
-    public ResponseEntity<UserJson> update(@RequestBody @Valid UpdateUserCommand command) {
-        return  ResponseEntity.ok(UserMapper.INSTANCE.mapToJson(userService.update(command)));
+    public ResponseEntity<UserJson> update(@RequestBody @Valid UpdateUserCommand command,@PathVariable long id) {
+        return  ResponseEntity.ok(UserMapper.INSTANCE.mapToJson(userService.update(command,id)));
     }
 
     @DeleteMapping("/{id}")

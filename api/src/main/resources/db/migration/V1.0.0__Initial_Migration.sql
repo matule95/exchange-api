@@ -1,9 +1,11 @@
 CREATE SEQUENCE users_id_sequence START 1;
 CREATE TABLE users (
     id BIGINT PRIMARY KEY DEFAULT nextval('users_id_sequence'),
-    name VARCHAR(256) NOT NULL,
+    name VARCHAR(256) ,
     username VARCHAR(256) NOT NULL,
     email VARCHAR(256) NOT NULL UNIQUE,
+    role VARCHAR(32) NOT NULL,
+    responsibility VARCHAR(32),
     password VARCHAR(256) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -18,23 +20,6 @@ CREATE TABLE password_resets (
     token VARCHAR(256) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     expires_at TIMESTAMP NOT NULL
-);
-
-CREATE SEQUENCE roles_id_sequence START 1;
-CREATE TABLE roles (
-    id BIGINT PRIMARY KEY DEFAULT nextval('roles_id_sequence'),
-    name VARCHAR(256) NOT NULL,
-    description VARCHAR(256) NOT NULL,
-
-    UNIQUE(name)
-);
-
-CREATE TABLE user_roles (
-    user_id BIGINT NOT NULL,
-    role_id BIGINT NOT NULL,
-    UNIQUE (user_id, role_id),
-    CONSTRAINT FK_user_roles_user_id FOREIGN KEY (user_id) REFERENCES users (id),
-    CONSTRAINT FK_user_roles_role_id FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 
 CREATE SEQUENCE auth_token_id_sequence START 1;

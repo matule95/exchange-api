@@ -13,5 +13,5 @@ public interface UserService {
     User findById(Long id);
     Page<User> fetchPaged(Pageable pageable, UserQuery userQuery);
     void deleteById(Long id);
-    User update(UpdateUserCommand command);
+    User update(UpdateUserCommand command, Long id);
 }

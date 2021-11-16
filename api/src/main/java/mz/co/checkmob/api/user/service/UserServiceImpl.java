@@ -47,8 +47,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(UpdateUserCommand command) {
-        User user = findById(command.getId());
+    public User update(UpdateUserCommand command, Long id) {
+        User user = findById(id);
         UserMapper.INSTANCE.updateModel(user, command);
 
         return userRepository.save(user);

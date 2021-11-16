@@ -11,11 +11,14 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class UpdateUserCommand {
-    private Long id;
+
+    private long id;
+
     @NotNull
     @NotEmpty
     @Size(min = 2)
     private String name;
 
-    @NotNull private UserRole role;
+    @NotNull
+    private UserRole role;
 }

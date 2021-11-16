@@ -31,12 +31,10 @@ public class User extends AbstractAggregateRoot<User> implements UserDetails {
     private String username;
     private String password;
 
-    @ManyToMany
-    @JoinTable(name = "user_roles",
-            foreignKey = @ForeignKey(name = "user_id"),
-            inverseForeignKey = @ForeignKey(name = "role_id")
-    )
-    private List<Role> roles;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+    private String responsibility;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

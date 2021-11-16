@@ -19,6 +19,13 @@ public class CreateUserCommand {
 
     @NotNull
     @NotEmpty
+    private String responsibility;
+
+    @NotNull
+    private UserRole role;
+
+    @NotNull
+    @NotEmpty
     @Size(min = 2)
     private String username;
 
