@@ -1,6 +1,8 @@
 package mz.co.checkmob.api.endpoints;
 
 import mz.co.checkmob.api.AbstractTest;
+import mz.co.checkmob.api.company.persistence.CompanyRepository;
+import mz.co.checkmob.api.company.service.CompanyService;
 import mz.co.checkmob.api.endpoint.domain.CreateEndpointCommand;
 import mz.co.checkmob.api.endpoint.domain.Endpoint;
 import mz.co.checkmob.api.endpoint.domain.EndpointMapper;
@@ -23,11 +25,14 @@ public class EndpointServiceTest extends AbstractTest {
     private EndpointService underTest;
 
     @Mock
+    private CompanyRepository companyRepository;
+
+    @Mock
     private EndpointRepository repository;
 
     @BeforeEach
     void setUp() {
-        underTest = new EndpointServiceImpl(repository);
+        underTest = new EndpointServiceImpl(repository,companyRepository);
     }
     @Test
     void shouldSaveEndpoint(){

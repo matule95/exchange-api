@@ -11,8 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "companies")
-@SQLDelete(sql = "UPDATE companies SET deleted_at = now() WHERE id=?")
-@Where(clause = "deleted_at is null")
+@SQLDelete(sql = "UPDATE companies SET company_status = false WHERE id=?")
 @Data
 public class Company {
     @Id
@@ -20,6 +19,13 @@ public class Company {
     private Long id;
     private String name;
     private String email;
+    private String baseUrl;
+    private Boolean companyStatus;
+    @Column(name = "username_checkmob")
+    private String usernameCheckmob;
+    @Column(name = "password_checkmob")
+    private String passwordCheckmob;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
