@@ -1,0 +1,14 @@
+
+CREATE SEQUENCE connections_id_sequence START 1;
+CREATE TABLE connections (
+            id BIGINT PRIMARY KEY DEFAULT nextval('connections_id_sequence'),
+            from_third_party BIGINT NOT NULL,
+            from_url VARCHAR(256) NOT NULL,
+            from_request_Type VARCHAR(256) NOT NULL,
+            to_third_party BIGINT NOT NULL,
+            to_url VARCHAR(256) NOT NULL,
+            to_request_type VARCHAR(256) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            deleted_at TIMESTAMP NULL
+);
