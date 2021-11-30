@@ -16,13 +16,13 @@ public class ApiService {
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .build();
 
-    public static <T> T post(String url, MultiValueMap<String, String> params, Class<T> returnClassType){
+    public static <T> T post(String url, MultiValueMap<String, Object> params, Class<T> returnClassType){
 
         return returnClassType.cast(client.post()
                 .uri(url)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromFormData(params))
+                .body(BodyInserters.fromMultipartData(params))
                 .retrieve()
                 .bodyToMono(returnClassType)
                 .block());

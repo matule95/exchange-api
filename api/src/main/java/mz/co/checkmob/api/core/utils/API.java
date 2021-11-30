@@ -6,7 +6,7 @@ public enum API {
 
     NO_AUTH {
         @Override
-        public <T> T post(String url, MultiValueMap<String, String> params, Class<T> returnClassType) {
+        public <T> T post(String url, MultiValueMap<String, Object> params, Class<T> returnClassType) {
             return returnClassType.cast(ApiService.post(url,params,returnClassType));
         }
 
@@ -17,7 +17,7 @@ public enum API {
 
     };
 
-    public abstract <T> T post(String url,MultiValueMap<String, String> params, Class<T> returnClassType);
+    public abstract <T> T post(String url,MultiValueMap<String, Object> params, Class<T> returnClassType);
     public abstract <T> T get(String url, Class<T> returnClassType);
 
 }

@@ -8,6 +8,7 @@ import mz.co.checkmob.api.authorization.domain.AuthorizationType;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -34,5 +35,7 @@ public class CreateConnectionCommand {
     @NotNull
     @NotEmpty
     private RequestType toRequestType;
+
+    List<Param> params;
 
 }

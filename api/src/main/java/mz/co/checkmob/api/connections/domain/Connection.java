@@ -11,6 +11,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -33,7 +34,6 @@ public class Connection {
     private Long toThirdParty;
     private String toUrl;
     private RequestType toRequestType;
-
 
     @CreationTimestamp
     private LocalDateTime createdAt;
