@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import mz.co.checkmob.api.connections.domain.ConnectionMapper;
 import mz.co.checkmob.api.connections.domain.CreateConnectionCommand;
+import mz.co.checkmob.api.connections.domain.query.ConnectionQuery;
 import mz.co.checkmob.api.connections.service.ConnectionService;
 import mz.co.checkmob.api.utils.PageJson;
 import org.springframework.data.domain.Pageable;
@@ -42,8 +43,8 @@ public class ConnectionController {
 
     @GetMapping
     @ApiOperation("Fetch all Connections")
-    public ResponseEntity<PageJson<ConnectionJson>> getAll(Pageable pageable) {
-        return ResponseEntity.ok(PageJson.of(connectionService.findAll(pageable)));
+    public ResponseEntity<PageJson<ConnectionJson>> getAll(Pageable pageable,ConnectionQuery connectionQuery) {
+        return ResponseEntity.ok(PageJson.of(connectionService.findAll(pageable, connectionQuery)));
     }
 
     @DeleteMapping("/{id}")

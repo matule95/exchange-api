@@ -24,6 +24,7 @@ public class Connection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
 
     private Long fromThirdParty;
     private String fromUrl;
