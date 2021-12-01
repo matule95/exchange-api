@@ -1,11 +1,27 @@
 package mz.co.checkmob.api.connections.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import lombok.Data;
+import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@Entity
+@Table(name = "params")
 public class Param {
 
-    private String from;
-    private String to;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
+    private String fromField;
+    private String toField;
+
+    @ManyToOne
+    @JsonIgnore
+    private Connection connection;
 }

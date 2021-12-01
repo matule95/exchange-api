@@ -13,9 +13,11 @@ import java.util.List;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public abstract class ConnectionMapper {
-    public static ConnectionMapper INSTANCE = Mappers.getMapper(ConnectionMapper.class);
+    public static final ConnectionMapper INSTANCE = Mappers.getMapper(ConnectionMapper.class);
 
     @Named("commandToModel")
+    @Mapping(target = "fromThirdParty", source = "fromThirdParty", ignore = true)
+    @Mapping(target = "toThirdParty", source = "toThirdParty", ignore = true)
     public abstract Connection mapToModel(CreateConnectionCommand command);
 
     @InheritInverseConfiguration

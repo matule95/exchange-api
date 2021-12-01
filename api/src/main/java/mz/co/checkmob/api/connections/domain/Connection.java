@@ -1,8 +1,6 @@
 package mz.co.checkmob.api.connections.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import mz.co.checkmob.api.endpoint.domain.Endpoint;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
@@ -14,7 +12,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @Table(name = "connections")
 @SQLDelete(sql = "UPDATE connections SET deleted_at = now() WHERE id=?")
 @Where(clause = "deleted_at is null")
@@ -26,14 +26,22 @@ public class Connection {
     private Long id;
 
 
-    private Long fromThirdParty;
+    @ManyToOne
+    private Endpoint fromThirdParty;
+
     private String fromUrl;
     private RequestType fromRequestType;
 
 
-    private Long toThirdParty;
+    @ManyToOne
+    private Endpoint toThirdParty;
+
     private String toUrl;
     private RequestType toRequestType;
+
+
+    @OneToMany(mappedBy = "connection")
+    private List<Param> params;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

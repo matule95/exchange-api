@@ -2,7 +2,6 @@ package mz.co.checkmob.api.core.utils;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
@@ -24,8 +23,8 @@ public class ApiService {
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromMultipartData(params))
                 .retrieve()
-                .bodyToMono(returnClassType)
-                .block());
+                .bodyToMono(returnClassType));
+               // .block());
     }
 
     public static <T> T get(String url ,Class<T> returnClassType){
