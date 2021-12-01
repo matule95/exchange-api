@@ -40,13 +40,15 @@ public class ConnectionServiceImpl implements ConnectionService {
         connection.setToThirdParty(endpointB);
         connection.setToUrl(endpointB.getUrl()+command.getToUrl());
 
-        Object noAuthMock = API.NO_AUTH.get(endpointA.getUrl()+command.getFromUrl(), Object.class);
+        Object noAuthMock = API.NO_AUTH.request(endpointA.getUrl()+command.getFromUrl(),
+                command.getFromRequestType(), Object.class);
         Map<String, Object> map = new ObjectMapper().convertValue(noAuthMock,Map.class);
         MultiValueMap<String,Object> params = new LinkedMultiValueMap<>();
 
         OperationType.operate(command.getParams(), map, params, command.getOperationType());
 
-        Object object = API.NO_AUTH.post(endpointB.getUrl()+command.getToUrl(),params, Object.class);
+        Object object = API.NO_AUTH.request(endpointB.getUrl()+command.getToUrl(),
+                command.getToRequestType(), params, Object.class);
 
         return save(connection);
     }
