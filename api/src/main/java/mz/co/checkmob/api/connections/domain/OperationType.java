@@ -13,11 +13,11 @@ public enum OperationType {
         @Override
         public void operate(List<Param> commandParams, Map<String, Object> map, MultiValueMap<String, Object> params) {
             commandParams.forEach(param ->
-                    params.add(param.getToField()[0], map.get(param.getFromField()[0]).toString().toLowerCase()) //rever depois
+                    params.add(param.getToField()[0], map.get(param.getFromField()[0]).toString().toUpperCase()) //rever depois
             );
             map.forEach((k, v) -> {
                 if(!contains(commandParams, k)){
-                    params.add(k, v.toString().toLowerCase());
+                    params.add(k, v.toString());
                 }
             });
         }
@@ -25,12 +25,12 @@ public enum OperationType {
         @Override
         public void operate(List<Param> commandParams, Map<String, Object> map, MultiValueMap<String, Object> params) {
             commandParams.forEach(param ->
-                    params.add(param.getToField()[0], map.get(param.getFromField()[0]).toString().toUpperCase()) //rever depois
+                    params.add(param.getToField()[0], map.get(param.getFromField()[0]).toString().toLowerCase()) //rever depois
             );
 
             map.forEach((k, v) -> {
                 if(!contains(commandParams, k)){
-                    params.add(k, v.toString().toUpperCase());
+                    params.add(k, v.toString());
                 }
             });
         }
@@ -42,7 +42,7 @@ public enum OperationType {
             );
             map.forEach((k, v) -> {
                 if(!contains(commandParams, k)){
-                    params.add(k, v.toString().toLowerCase());
+                    params.add(k, v.toString());
                 }
             });
         }
@@ -59,7 +59,7 @@ public enum OperationType {
 
             map.forEach((k, v) -> {
                 if(!contains(commandParams, k)){
-                    params.add(k, v.toString().toLowerCase());
+                    params.add(k, v.toString());
                 }
             });
         }
@@ -80,18 +80,19 @@ public enum OperationType {
     public abstract void operate(List<Param> commandParams,
                                  Map<String, Object> map, MultiValueMap<String,Object> params);
 
-    public static void operate(List<Param> commandParams,
-                                 Map<String, Object> map, MultiValueMap<String,Object> params, OperationType operateType){
-        if(operateType  == OperationType.LOWERCASE){
+    public static void operate(List<Param> commandParams, Map<String, Object> map,
+                               MultiValueMap<String,Object> params, OperationType operateType){
+
+        if(operateType.equals(OperationType.LOWERCASE)){
             OperationType.LOWERCASE.operate(commandParams, map, params);
         }
-        else if(operateType == OperationType.UPPERCASE){
+        else if(operateType.equals(OperationType.UPPERCASE)){
             OperationType.UPPERCASE.operate(commandParams, map, params);
         }
-        else if(operateType == OperationType.CONCAT){
+        else if(operateType.equals(OperationType.CONCAT)){
             OperationType.CONCAT.operate(commandParams, map, params);
 
-        }else if(operateType == OperationType.JOIN){
+        }else if(operateType.equals(OperationType.JOIN)){
             OperationType.JOIN.operate(commandParams,map,params);
         }
     }
