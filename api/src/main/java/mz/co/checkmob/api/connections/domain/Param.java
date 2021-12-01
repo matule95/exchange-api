@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import mz.co.checkmob.api.core.utils.AttachmentsConverter;
 
 import javax.persistence.*;
 
@@ -18,8 +19,12 @@ public class Param {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
-    private String fromField;
-    private String toField;
+
+    @Convert(converter = AttachmentsConverter.class)
+    private String [] fromField;
+
+    @Convert(converter = AttachmentsConverter.class)
+    private String [] toField;
 
     @ManyToOne
     @JsonIgnore

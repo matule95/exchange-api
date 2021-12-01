@@ -17,8 +17,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -45,33 +44,24 @@ public class ConnectionServiceImpl implements ConnectionService {
         Map<String, Object> map = new ObjectMapper().convertValue(noAuthMock,Map.class);
         MultiValueMap<String,Object> params = new LinkedMultiValueMap<>();
 
-        command.getParams().forEach(param ->
-            params.add(param.getToField(), map.get(param.getFromField())+"") //rever depois
-        );
-
-        map.forEach((k, v) -> {
-            if(!contains(command.getParams(), k)){
-                params.add(k, v);
-            }
-        });
+        OperationType.operate(command.getParams(), map, params, command.getOperationType());
 
         Object object = API.NO_AUTH.post(endpointB.getUrl()+command.getToUrl(),params, Object.class);
 
+        return save(connection);
+    }
+
+    private Connection save(Connection connection){
         Connection con = connectionRepository.save(connection);
 
-         con.getParams().stream().forEach(p -> {
-            p.setConnection(con);
-            paramRepository.save(p);
+        con.getParams().forEach(param -> {
+            param.setConnection(con);
+            paramRepository.save(param);
         });
 
         return connectionRepository.save(con);
     }
-
-    private boolean contains(List<Param> params, String key){
-       return params.parallelStream().anyMatch(param -> param.getFromField().equals(key));
-    }
-
-
+    
     @Override
     public Connection findById(Long id) {
         return connectionRepository.findById(id).orElseThrow(EntityNotFoundException::new);
