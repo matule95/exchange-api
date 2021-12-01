@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 public class ConnectionSpecification {
     private final ConnectionRepository connectionRepository;
 
-    public Page<Connection> executeQuery(Pageable pageable, ConnectionQuery connectionQuery){
-        return connectionRepository.findAll(toSpecification(connectionQuery),pageable);
+    public Page<Connection> executeQuery(ConnectionQuery connectionQuery, Pageable pageable){
+        return connectionRepository.findAll (toSpecification(connectionQuery),pageable);
     }
 
     public Specification<Connection> toSpecification (ConnectionQuery connectionQuery){

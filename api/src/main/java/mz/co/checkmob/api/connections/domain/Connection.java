@@ -24,15 +24,15 @@ public class Connection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
     private Long fromThirdParty;
     private String fromUrl;
+
     private RequestType fromRequestType;
 
 
     private Long toThirdParty;
     private String toUrl;
+
     private RequestType toRequestType;
 
 
@@ -43,4 +43,7 @@ public class Connection {
     private LocalDateTime updatedAt;
 
     private LocalDateTime deletedAt;
+
+
+    private String name;
 }

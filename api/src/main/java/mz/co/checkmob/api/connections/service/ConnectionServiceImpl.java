@@ -56,7 +56,8 @@ public class ConnectionServiceImpl implements ConnectionService {
 
     @Override
     public Page<ConnectionJson> findAll(Pageable pageable,ConnectionQuery connectionQuery) {
-        return ConnectionMapper.INSTANCE.mapToJson(connectionSpecification.executeQuery(pageable,connectionQuery));
+        return ConnectionMapper.INSTANCE.mapToJson(
+                connectionSpecification.executeQuery(connectionQuery,pageable));
     }
 
     @Override

@@ -1,10 +1,8 @@
 package mz.co.checkmob.api.connections.domain.query;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class ConnectionQuery {
     private String name;
 }
