@@ -6,7 +6,9 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import mz.co.checkmob.api.user.events.UserCreatedEvent;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,11 +18,15 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
+import static mz.co.checkmob.api.user.domain.UserStatus.ACTIVE;
+
 @Entity
 @Setter
 @Getter
 @Accessors(chain = true)
 @Table(name = "users")
+@SQLDelete(sql = "UPDATE users SET deleted_at = now() WHERE id=?")
+@Where(clause = "deleted_at is null")
 @RequiredArgsConstructor
 public class User extends AbstractAggregateRoot<User> implements UserDetails {
     @Id
@@ -32,6 +38,9 @@ public class User extends AbstractAggregateRoot<User> implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
+
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     private String responsibility;
@@ -41,6 +50,7 @@ public class User extends AbstractAggregateRoot<User> implements UserDetails {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -64,7 +74,7 @@ public class User extends AbstractAggregateRoot<User> implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return userStatus.equals(UserStatus.ACTIVE);
     }
 
     public User created(String username, String rawPassword) {

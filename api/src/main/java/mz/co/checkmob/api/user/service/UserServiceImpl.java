@@ -1,9 +1,12 @@
 package mz.co.checkmob.api.user.service;
 
 import lombok.RequiredArgsConstructor;
+
+import mz.co.checkmob.api.company.domain.CompanyStatus;
 import mz.co.checkmob.api.user.domain.*;
 import mz.co.checkmob.api.user.domain.query.UserQuery;
 import mz.co.checkmob.api.user.persistence.UserRepository;
+import mz.co.checkmob.api.user.presentation.UserJson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,6 +27,7 @@ public class UserServiceImpl implements UserService {
         if (!validateFields(command)) return null;
 
         User user = UserMapper.INSTANCE.mapToModel(command);
+        user.setUserStatus(UserStatus.ACTIVE);
         user.setPassword(new BCryptPasswordEncoder().encode(command.getPassword()));
         user.created(user.getUsername(), command.getPassword());
         return userRepository.save(user);
@@ -52,6 +56,14 @@ public class UserServiceImpl implements UserService {
         UserMapper.INSTANCE.updateModel(user, command);
 
         return userRepository.save(user);
+    }
+
+
+    @Override
+    public UserJson setStatus(Long userId, UserStatus status){
+        User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        user.setUserStatus(status);
+        return UserMapper.INSTANCE.mapToJson(userRepository.save(user));
     }
 
     @Override

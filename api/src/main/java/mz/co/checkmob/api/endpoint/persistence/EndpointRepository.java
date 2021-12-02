@@ -1,6 +1,7 @@
 package mz.co.checkmob.api.endpoint.persistence;
 
 import mz.co.checkmob.api.endpoint.domain.Endpoint;
+import mz.co.checkmob.api.endpoint.domain.query.EndpointQuery;
 import mz.co.checkmob.api.endpoint.presentation.EndpointJson;
 import mz.co.checkmob.api.utils.PageJson;
 import org.springframework.data.domain.Page;
@@ -14,5 +15,7 @@ import java.util.Optional;
 public interface EndpointRepository extends JpaRepository<Endpoint, Long>, JpaSpecificationExecutor<Endpoint> {
     Page<Endpoint> findAll(Specification<Endpoint> specification, Pageable pageable);
 
-    Page<EndpointJson> findAllByCompanyId(Long id,Pageable pageable);
+
+    Page<EndpointJson> findAllByCompanyId(Long id, Pageable pageable);
+
 }
