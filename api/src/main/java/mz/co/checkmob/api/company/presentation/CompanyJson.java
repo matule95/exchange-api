@@ -1,6 +1,7 @@
 package mz.co.checkmob.api.company.presentation;
 
 import lombok.Data;
+import mz.co.checkmob.api.company.domain.CompanyStatus;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +10,7 @@ public class CompanyJson {
     private Long id;
     private String name;
     private String email;
-    private String companyStatus;
+    private CompanyStatus companyStatus;
     private String baseUrl;
     private String usernameCheckmob;
     private LocalDateTime createdAt;

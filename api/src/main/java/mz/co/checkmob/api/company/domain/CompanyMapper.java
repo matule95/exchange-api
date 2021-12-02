@@ -28,6 +28,8 @@ public abstract class CompanyMapper {
 
     public abstract void updateModel(@MappingTarget Company company, UpdateCompanyCommand command);
 
+    public abstract  void setStatusModel(@MappingTarget Company company, CompanyStatus status);
+
     public abstract void cloneModel(@MappingTarget Company company, Company companySource);
 
     @InheritInverseConfiguration
