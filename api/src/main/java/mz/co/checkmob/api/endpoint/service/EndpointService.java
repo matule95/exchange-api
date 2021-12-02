@@ -14,4 +14,5 @@ public interface EndpointService {
     Endpoint findById(Long id);
     Page<EndpointJson> findAll(Pageable pageable);
     void deleteById(Long id);
+    long countAllEndpoints();
 }

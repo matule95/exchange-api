@@ -57,4 +57,9 @@ public class EndpointServiceImpl implements EndpointService {
         Endpoint endpoint = findById(id);
         endpointRepository.deleteById(endpoint.getId());
     }
+
+    @Override
+    public long countAllEndpoints() {
+        return endpointRepository.count();
+    }
 }

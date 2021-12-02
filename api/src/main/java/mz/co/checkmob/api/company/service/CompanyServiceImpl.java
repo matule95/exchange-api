@@ -54,4 +54,9 @@ public class CompanyServiceImpl implements CompanyService {
     public void deleteById(Long companyId) {
         companyRepository.deleteById(companyId);
     }
+
+    @Override
+    public long countAllCompanies() {
+        return companyRepository.count();
+    }
 }

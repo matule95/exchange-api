@@ -54,6 +54,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Override
+    public long countAllUsers() {
+        return userRepository.count();
+    }
+
     private boolean validateFields(CreateUserCommand command) {
         if (command.getUsername() == null || command.getUsername().isEmpty())
             throw new RuntimeException("O campo Username é obrigatório.");

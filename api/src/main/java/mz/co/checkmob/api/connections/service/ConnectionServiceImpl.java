@@ -114,5 +114,10 @@ public class ConnectionServiceImpl implements ConnectionService {
         connectionRepository.deleteById(connection.getId());
     }
 
+    @Override
+    public long countAllConnections() {
+        return connectionRepository.count();
+    }
+
 
 }

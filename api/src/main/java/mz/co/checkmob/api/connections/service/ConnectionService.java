@@ -12,4 +12,5 @@ public interface ConnectionService {
     Connection findById(Long id);
     Page<ConnectionJson> findAll(Pageable pageable, ConnectionQuery connectionQuery);
     void deleteById(Long id);
+    long countAllConnections();
 }

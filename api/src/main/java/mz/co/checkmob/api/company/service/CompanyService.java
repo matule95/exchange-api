@@ -15,4 +15,5 @@ public interface CompanyService {
     CompanyJson update(UpdateCompanyCommand updateCompanyCommand, Long companyId);
     CompanyJson setStatus (Long companyId, CompanyStatus companyStatus);
     void deleteById(Long companyId);
+    long countAllCompanies();
 }
