@@ -3,14 +3,19 @@ package mz.co.checkmob.api.connections.presentation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import mz.co.checkmob.api.connections.domain.Connection;
 import mz.co.checkmob.api.connections.domain.ConnectionMapper;
 import mz.co.checkmob.api.connections.domain.CreateConnectionCommand;
+import mz.co.checkmob.api.connections.domain.query.ConnectionQuery;
+import mz.co.checkmob.api.connections.domain.query.ConnectionSpecification;
 import mz.co.checkmob.api.connections.service.ConnectionService;
 import mz.co.checkmob.api.utils.PageJson;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
@@ -22,6 +27,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class ConnectionController {
     private final ConnectionService connectionService;
+    private final ConnectionSpecification connectionSpecification;
 
     @PostMapping
     @ApiOperation("Create a new Connection")
@@ -40,10 +46,13 @@ public class ConnectionController {
         }
     }
 
+
     @GetMapping
     @ApiOperation("Fetch all Connections")
-    public ResponseEntity<PageJson<ConnectionJson>> getAll(Pageable pageable) {
-        return ResponseEntity.ok(PageJson.of(connectionService.findAll(pageable)));
+    public ResponseEntity<PageJson<ConnectionJson>> getAll(Pageable pageable,ConnectionQuery connectionQuery) {
+        return ResponseEntity.ok(PageJson.of(connectionService.findAll(pageable, connectionQuery)));
+
+
     }
 
     @DeleteMapping("/{id}")

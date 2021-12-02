@@ -33,6 +33,9 @@ public class CreateConnectionCommand {
     @NotNull
     @NotEmpty
     private RequestType toRequestType;
+    @NotNull
+    @NotEmpty
+    private String name;
 
     List<Param> params;
 

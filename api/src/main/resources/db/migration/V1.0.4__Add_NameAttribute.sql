@@ -1,0 +1,3 @@
+
+ALTER TABLE connections
+ADD COLUMN name VARCHAR(256) NOT NULL;

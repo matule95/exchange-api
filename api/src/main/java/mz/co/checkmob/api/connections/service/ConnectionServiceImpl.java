@@ -3,6 +3,12 @@ package mz.co.checkmob.api.connections.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import mz.co.checkmob.api.connections.domain.*;
+import mz.co.checkmob.api.connections.domain.CreateConnectionCommand;
+import mz.co.checkmob.api.connections.domain.Connection;
+import mz.co.checkmob.api.connections.domain.ConnectionMapper;
+import mz.co.checkmob.api.connections.domain.NoAuthMock;
+import mz.co.checkmob.api.connections.domain.query.ConnectionQuery;
+import mz.co.checkmob.api.connections.domain.query.ConnectionSpecification;
 import mz.co.checkmob.api.connections.persistence.ConnectionRepository;
 import mz.co.checkmob.api.connections.persistence.ParamRepository;
 import mz.co.checkmob.api.connections.presentation.ConnectionJson;
@@ -11,6 +17,7 @@ import mz.co.checkmob.api.endpoint.domain.Endpoint;
 import mz.co.checkmob.api.endpoint.service.EndpointService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.integration.dsl.EndpointSpec;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -26,6 +33,8 @@ public class ConnectionServiceImpl implements ConnectionService {
     private final ConnectionRepository connectionRepository;
     private final ParamRepository paramRepository;
     private final EndpointService endpointService;
+    private final ConnectionSpecification connectionSpecification;
+
 
     @Override
     @Transactional
@@ -96,8 +105,9 @@ public class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public Page<ConnectionJson> findAll(Pageable pageable) {
-        return ConnectionMapper.INSTANCE.mapToJson(connectionRepository.findAll(pageable));
+    public Page<ConnectionJson> findAll(Pageable pageable,ConnectionQuery connectionQuery) {
+        return ConnectionMapper.INSTANCE.mapToJson(
+                connectionSpecification.executeQuery(connectionQuery,pageable));
     }
 
     @Override

@@ -18,6 +18,8 @@ public class ConnectionJson {
     private RequestType fromRequestType;
 
     private Endpoint toThirdParty;
+    private String name;
+
     private String toUrl;
     private RequestType toRequestType;
 

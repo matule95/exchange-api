@@ -1,6 +1,7 @@
 package mz.co.checkmob.api.connections.persistence;
 
 import mz.co.checkmob.api.connections.domain.Connection;
+import mz.co.checkmob.api.connections.domain.query.ConnectionQuery;
 import mz.co.checkmob.api.connections.presentation.ConnectionJson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

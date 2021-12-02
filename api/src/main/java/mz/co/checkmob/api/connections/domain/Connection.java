@@ -50,4 +50,7 @@ public class Connection {
     private LocalDateTime updatedAt;
 
     private LocalDateTime deletedAt;
+
+
+    private String name;
 }

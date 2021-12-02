@@ -9,9 +9,12 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static mz.co.checkmob.api.company.domain.CompanyStatus.ACTIVE;
+
 @Entity
 @Table(name = "companies")
-@SQLDelete(sql = "UPDATE companies SET company_status = false WHERE id=?")
+@SQLDelete(sql = "UPDATE companies SET deleted_at = now() WHERE id=?")
+@Where(clause = "deleted_at is null")
 @Data
 public class Company {
     @Id
@@ -20,7 +23,9 @@ public class Company {
     private String name;
     private String email;
     private String baseUrl;
-    private Boolean companyStatus;
+
+    private CompanyStatus companyStatus=ACTIVE;
+
     @Column(name = "username_checkmob")
     private String usernameCheckmob;
     @Column(name = "password_checkmob")
