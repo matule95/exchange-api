@@ -29,4 +29,9 @@ public class Param {
     @ManyToOne
     @JsonIgnore
     private Connection connection;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "operation_type")
+    private OperationType operationType;
+
 }

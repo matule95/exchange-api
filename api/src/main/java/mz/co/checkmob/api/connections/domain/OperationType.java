@@ -11,94 +11,62 @@ public enum OperationType {
 
     UPPERCASE {
         @Override
-        public void operate(List<Param> commandParams, Map<String, Object> map, MultiValueMap<String, Object> params) {
-            commandParams.forEach(param ->
-                    params.add(param.getToField()[0], map.get(param.getFromField()[0]).toString().toUpperCase()) //rever depois
-            );
-            map.forEach((k, v) -> {
-                if(!contains(commandParams, k)){
-                    params.add(k, v.toString());
-                }
-            });
+        public void operate(Param param, Map<String, Object> map, MultiValueMap<String, Object> params) {
+            params.add(param.getToField()[0], map.get(param.getFromField()[0]).toString().toUpperCase());
         }
-    }, LOWERCASE {
+    },
+    LOWERCASE {
         @Override
-        public void operate(List<Param> commandParams, Map<String, Object> map, MultiValueMap<String, Object> params) {
-            commandParams.forEach(param ->
-                    params.add(param.getToField()[0], map.get(param.getFromField()[0]).toString().toLowerCase()) //rever depois
-            );
+        public void operate(Param param, Map<String, Object> map, MultiValueMap<String, Object> params) {
+            params.add(param.getToField()[0], map.get(param.getFromField()[0]).toString().toLowerCase());
+        }
+    },
+    CONCAT {
+        @Override
+        public void operate(Param param, Map<String, Object> map, MultiValueMap<String, Object> params) {
+            params.add(param.getToField()[0], concat(map,param.getFromField()));
+        }
 
-            map.forEach((k, v) -> {
-                if(!contains(commandParams, k)){
-                    params.add(k, v.toString());
-                }
-            });
-        }
-    }, CONCAT {
-        @Override
-        public void operate(List<Param> commandParams, Map<String, Object> map, MultiValueMap<String, Object> params) {
-            commandParams.forEach(param ->
-                    params.add(param.getToField()[0], concat(map,param.getFromField())) //rever depois
-            );
-            map.forEach((k, v) -> {
-                if(!contains(commandParams, k)){
-                    params.add(k, v.toString());
-                }
-            });
-        }
         private String concat(Map<String, Object> map, String [] attributes){
             StringBuilder stringBuilder = new StringBuilder();
             Arrays.stream(attributes)
                     .forEach(attribute -> stringBuilder.append(" ").append(map.get(attribute)));
             return stringBuilder.toString();
         }
-    }, JOIN{
+    }, SPLIT{
         @Override
-        public void operate(List<Param> commandParams, Map<String, Object> map, MultiValueMap<String, Object> params) {
-            params.addAll(mapAttributes(map, commandParams));
-
-            map.forEach((k, v) -> {
-                if(!contains(commandParams, k)){
-                    params.add(k, v.toString());
-                }
-            });
+        public void operate(Param param, Map<String, Object> map, MultiValueMap<String, Object> params) {
+            params.addAll(mapAttributes(map, param));
         }
 
-        private MultiValueMap<String, Object> mapAttributes(Map<String, Object> values,List<Param> params){
+        private MultiValueMap<String, Object> mapAttributes(Map<String, Object> values,Param param){
             MultiValueMap<String, Object> aux =  new LinkedMultiValueMap<>();
 
-            params.forEach(p -> {
-                Object[] object = values.get(p.getFromField()[0]).toString().split(" ",p.getToField().length);
-                for (int i = 0; i < p.getToField().length; i++) {
-                    aux.add(p.getToField()[i],object[i]);
+                Object[] object = values.get(param.getFromField()[0]).toString().split(" ",param.getToField().length);
+
+                for (int i = 0; i < param.getToField().length; i++) {
+                    aux.add(param.getToField()[i],object[i]);
                 }
-            });
             return aux;
         }
     };
 
-    public abstract void operate(List<Param> commandParams,
-                                 Map<String, Object> map, MultiValueMap<String,Object> params);
+    public abstract void operate(Param commandParam, Map<String, Object> map, MultiValueMap<String,Object> params);
 
     public static void operate(List<Param> commandParams, Map<String, Object> map,
-                               MultiValueMap<String,Object> params, OperationType operateType){
+                               MultiValueMap<String,Object> params){
 
-        if(operateType.equals(OperationType.LOWERCASE)){
-            OperationType.LOWERCASE.operate(commandParams, map, params);
-        }
-        else if(operateType.equals(OperationType.UPPERCASE)){
-            OperationType.UPPERCASE.operate(commandParams, map, params);
-        }
-        else if(operateType.equals(OperationType.CONCAT)){
-            OperationType.CONCAT.operate(commandParams, map, params);
+        commandParams.parallelStream().forEach(e-> e.getOperationType().operate(e,map,params));
 
-        }else if(operateType.equals(OperationType.JOIN)){
-            OperationType.JOIN.operate(commandParams,map,params);
-        }
+        map.forEach((k, v) -> {
+            if(notContains(commandParams, k)){
+                params.add(k, v);
+            }
+        });
     }
 
-    private static boolean contains(List<Param> params, String key){
-        return params.parallelStream()
+    private static boolean notContains(List<Param> params, String key){
+        return !params.parallelStream()
                 .anyMatch(param -> Arrays.asList(param.getFromField()).contains(key));
     }
 

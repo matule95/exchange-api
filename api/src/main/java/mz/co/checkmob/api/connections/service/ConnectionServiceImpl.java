@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
@@ -61,7 +62,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
             for(Map<String,Object> m : map) {
                 MultiValueMap<String,Object> p = new LinkedMultiValueMap<>();
-                OperationType.operate(command.getParams(), m, p, command.getOperationType());
+                OperationType.operate(command.getParams(), m, p);
                 params.add(p);
             }
 
@@ -74,10 +75,16 @@ public class ConnectionServiceImpl implements ConnectionService {
 
             MultiValueMap<String,Object> params = new LinkedMultiValueMap<>();
 
-            OperationType.operate(command.getParams(), map, params, command.getOperationType());
+            OperationType.operate(command.getParams(), map, params);
 
-            Object object = API.NO_AUTH.request(endpointB.getUrl()+command.getToUrl(),
-                    command.getToRequestType(), params, Object.class);
+            Object object;
+
+            try{
+                object = API.NO_AUTH.request(endpointB.getUrl()+command.getToUrl(),
+                        command.getToRequestType(), params, Object.class);
+            }catch(WebClientResponseException e){
+                System.out.println(e.getMessage());
+            }
 
         }
 

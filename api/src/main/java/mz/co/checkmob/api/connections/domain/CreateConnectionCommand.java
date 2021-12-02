@@ -38,7 +38,4 @@ public class CreateConnectionCommand {
     private String name;
 
     List<Param> params;
-
-    OperationType operationType;
-
 }

@@ -51,6 +51,7 @@ public class Connection {
 
     private LocalDateTime deletedAt;
 
-
+    @Column(name = "name")
     private String name;
+
 }
