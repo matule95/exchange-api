@@ -3,10 +3,13 @@ package mz.co.checkmob.api.endpoint.presentation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import mz.co.checkmob.api.connections.domain.query.ConnectionQuery;
+import mz.co.checkmob.api.connections.presentation.ConnectionJson;
 import mz.co.checkmob.api.endpoint.domain.CreateEndpointCommand;
 import mz.co.checkmob.api.endpoint.domain.Endpoint;
 import mz.co.checkmob.api.endpoint.domain.UpdateEndpointCommand;
 import mz.co.checkmob.api.endpoint.domain.EndpointMapper;
+import mz.co.checkmob.api.endpoint.domain.query.EndpointQuery;
 import mz.co.checkmob.api.endpoint.service.EndpointService;
 import mz.co.checkmob.api.utils.PageJson;
 import org.springframework.data.domain.Page;
@@ -56,9 +59,12 @@ public class EndpointController {
 
     @GetMapping
     @ApiOperation("Fetch all Endpoints")
-    public ResponseEntity<PageJson<EndpointJson>> getAll( Pageable pageable) {
-        return ResponseEntity.ok(PageJson.of(endpointService.findAll(pageable)));
+    public ResponseEntity<PageJson<EndpointJson> > getAll(Pageable pageable, EndpointQuery endpointQuery) {
+        return ResponseEntity.ok(PageJson.of(endpointService.findAll(pageable, endpointQuery)));
     }
+
+
+
 
     @DeleteMapping("/{id}")
     @ApiOperation("Deletes a Single Endpoint")

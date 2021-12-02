@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import mz.co.checkmob.api.company.persistence.CompanyRepository;
 import mz.co.checkmob.api.company.service.CompanyService;
 import mz.co.checkmob.api.endpoint.domain.*;
+import mz.co.checkmob.api.endpoint.domain.query.EndpointQuery;
+import mz.co.checkmob.api.endpoint.domain.query.EndpointSpecification;
 import mz.co.checkmob.api.endpoint.persistence.EndpointRepository;
 import mz.co.checkmob.api.endpoint.presentation.EndpointJson;
 import org.springframework.data.domain.Page;
@@ -18,6 +20,7 @@ import javax.persistence.EntityNotFoundException;
 public class EndpointServiceImpl implements EndpointService {
     private final EndpointRepository endpointRepository;
     private final CompanyRepository companyRepository;
+    private final EndpointSpecification endpointSpecification;
 
     @Override
     @Transactional
@@ -48,8 +51,9 @@ public class EndpointServiceImpl implements EndpointService {
     }
 
     @Override
-    public Page<EndpointJson> findAll(Pageable pageable) {
-        return EndpointMapper.INSTANCE.mapToJson(endpointRepository.findAll(pageable));
+    public Page<EndpointJson> findAll(Pageable pageable, EndpointQuery endpointQuery) {
+        return EndpointMapper.INSTANCE.mapToJson(
+                endpointSpecification.executeQuery(endpointQuery,pageable));
     }
 
     @Override
