@@ -15,16 +15,26 @@ public class ApiService {
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .build();
 
-    public static <T> T post(String url, MultiValueMap<String, Object> params, Class<T> returnClassType){
+    public static <T> T post(String url, Object params, Class<T> returnClassType){
 
-        return returnClassType.cast(client.post()
-                .uri(url)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .accept(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromMultipartData(params))
-                .retrieve()
-                .bodyToMono(returnClassType));
-               // .block());
+        if(params  instanceof MultiValueMap) {
+            return returnClassType.cast(client.post()
+                    .uri(url)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .body(BodyInserters.fromMultipartData((MultiValueMap)params))
+                    .retrieve()
+                    .bodyToMono(returnClassType)
+             .block());
+        }else{
+            return returnClassType.cast(client.post()
+                    .uri(url)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .body(BodyInserters.fromValue(params))
+                    .retrieve()
+                    .bodyToMono(returnClassType));
+        }
     }
 
     public static <T> T get(String url ,Class<T> returnClassType){

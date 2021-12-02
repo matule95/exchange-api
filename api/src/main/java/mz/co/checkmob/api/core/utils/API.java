@@ -1,13 +1,12 @@
 package mz.co.checkmob.api.core.utils;
 
 import mz.co.checkmob.api.connections.domain.RequestType;
-import org.springframework.util.MultiValueMap;
 
 public enum API {
 
     NO_AUTH {
         @Override
-        public <T> T request(String url, RequestType requestType, MultiValueMap<String, Object> params, Class<T> returnClassType) {
+        public <T> T request(String url, RequestType requestType, Object params, Class<T> returnClassType) {
             if(requestType.equals(RequestType.POST)){
                 returnClassType.cast(ApiService.post(url,params,returnClassType));
             }
@@ -23,7 +22,7 @@ public enum API {
         }
     };
 
-    public abstract <T> T request(String url,RequestType requestType, MultiValueMap<String, Object> params, Class<T> returnClassType);
+    public abstract <T> T request(String url,RequestType requestType, Object params, Class<T> returnClassType);
     public abstract <T> T request(String url, RequestType requestType, Class<T> returnClassType);
 
 }

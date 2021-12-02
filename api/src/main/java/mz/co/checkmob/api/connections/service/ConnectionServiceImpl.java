@@ -18,6 +18,7 @@ import org.springframework.util.MultiValueMap;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,8 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     @Transactional
     public Connection create(CreateConnectionCommand command) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
 
         Connection connection = ConnectionMapper.INSTANCE.mapToModel(command);
 
@@ -42,16 +45,39 @@ public class ConnectionServiceImpl implements ConnectionService {
 
         Object noAuthMock = API.NO_AUTH.request(endpointA.getUrl()+command.getFromUrl(),
                 command.getFromRequestType(), Object.class);
-        Map<String, Object> map = new ObjectMapper().convertValue(noAuthMock,Map.class);
-        MultiValueMap<String,Object> params = new LinkedMultiValueMap<>();
 
-        OperationType.operate(command.getParams(), map, params, command.getOperationType());
+        if(command.getIsCollection()){
+            List<Map<String, Object>> map = (List<Map<String, Object>>) ((List) noAuthMock).parallelStream()
+                    .map(e-> objectMapper.convertValue(e,Map.class)).collect(Collectors.toList());
 
-        Object object = API.NO_AUTH.request(endpointB.getUrl()+command.getToUrl(),
-                command.getToRequestType(), params, Object.class);
+            List<MultiValueMap<String,Object>> params = new ArrayList<>();
+
+            for(Map<String,Object> m : map) {
+                MultiValueMap<String,Object> p = new LinkedMultiValueMap<>();
+                OperationType.operate(command.getParams(), m, p, command.getOperationType());
+                params.add(p);
+            }
+
+            Object object = API.NO_AUTH.request(endpointB.getUrl()+command.getToUrl(),
+                    command.getToRequestType(), params, Object.class);
+
+        }else{
+
+            Map<String, Object> map = objectMapper.convertValue(noAuthMock,Map.class);
+
+            MultiValueMap<String,Object> params = new LinkedMultiValueMap<>();
+
+            OperationType.operate(command.getParams(), map, params, command.getOperationType());
+
+            Object object = API.NO_AUTH.request(endpointB.getUrl()+command.getToUrl(),
+                    command.getToRequestType(), params, Object.class);
+
+        }
 
         return save(connection);
     }
+
+
 
     private Connection save(Connection connection){
         Connection con = connectionRepository.save(connection);
