@@ -38,8 +38,4 @@ public class CreateConnectionCommand {
 
     OperationType operationType;
 
-    Boolean isCollection;
-
-
-
 }

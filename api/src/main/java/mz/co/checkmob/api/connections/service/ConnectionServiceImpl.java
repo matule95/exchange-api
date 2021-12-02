@@ -46,7 +46,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         Object noAuthMock = API.NO_AUTH.request(endpointA.getUrl()+command.getFromUrl(),
                 command.getFromRequestType(), Object.class);
 
-        if(command.getIsCollection()){
+        if(noAuthMock instanceof Collection){
             List<Map<String, Object>> map = (List<Map<String, Object>>) ((List) noAuthMock).parallelStream()
                     .map(e-> objectMapper.convertValue(e,Map.class)).collect(Collectors.toList());
 
