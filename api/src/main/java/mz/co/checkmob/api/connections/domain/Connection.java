@@ -40,7 +40,7 @@ public class Connection {
     private RequestType toRequestType;
 
 
-    @OneToMany(mappedBy = "connection")
+    @OneToMany(mappedBy = "connection", fetch = FetchType.EAGER)
     private List<Param> params;
 
     @CreationTimestamp
