@@ -49,7 +49,7 @@ public class CompanyController {
         return  ResponseEntity.ok(companyService.update(command,id));
     }
 
-    @PutMapping("status/{id}/")
+    @PutMapping("/{id}/status")
     @ApiOperation("Update Company Status")
     public ResponseEntity<CompanyJson> updateStatus(@PathVariable Long id, CompanyStatus status){
         return ResponseEntity.ok(companyService.setStatus(id,status));

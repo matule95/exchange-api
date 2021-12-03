@@ -56,7 +56,7 @@ public class UserController {
         return  ResponseEntity.ok(UserMapper.INSTANCE.mapToJson(userService.update(command,id)));
     }
 
-    @PutMapping("status/{id}/{status}")
+    @PutMapping("/{id}/status")
     @ApiOperation("Update User Status")
     public ResponseEntity<UserJson> updateStatus(@PathVariable Long id, UserStatus status){
         return ResponseEntity.ok(userService.setStatus(id,status));
