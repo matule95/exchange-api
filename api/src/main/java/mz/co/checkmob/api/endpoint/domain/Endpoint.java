@@ -1,8 +1,7 @@
 package mz.co.checkmob.api.endpoint.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import mz.co.checkmob.api.authorization.domain.AuthorizationType;
 import mz.co.checkmob.api.company.domain.Company;
 import mz.co.checkmob.api.utils.JsonObjectConverter;
@@ -16,7 +15,9 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @Table(name = "endpoints")
 @SQLDelete(sql = "UPDATE endpoints SET deleted_at = now() WHERE id=?")
 @Where(clause = "deleted_at is null")
@@ -31,6 +32,7 @@ public class Endpoint {
 
     private AuthorizationType authenticationType;
 
+    @JsonIgnore
     @ManyToOne
     private Company company;
 
