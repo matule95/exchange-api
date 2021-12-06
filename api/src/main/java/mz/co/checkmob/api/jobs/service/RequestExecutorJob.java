@@ -35,31 +35,8 @@ public class RequestExecutorJob implements SchedulingConfigurer {
 
     private void nextScheduledDate(RequestExecutor executor) {
         LocalDateTime atualDate = executor.getExecuteAt();
-        switch (executor.getFrequency()) {
-            case DAILY:
-                if (executor.getUnity().equals(TimeUnity.MINUTE))
-                    executor.setExecuteAt(atualDate.plusMinutes(executor.getEvery()));
-                else
-                    executor.setExecuteAt(atualDate.plusHours(executor.getEvery()));
-                break;
-            case WEEKLY:
-                executor.setExecuteAt(atualDate.plusWeeks(1L));
-                break;
-            case MONTHLY:
-                executor.setExecuteAt(atualDate.plusMonths(1L));
-                break;
-            case ANNUALLY:
-                executor.setExecuteAt(atualDate.plusYears(1L));
-                break;
-            case QUARTERLY:
-                executor.setExecuteAt(atualDate.plusWeeks(3L));
-                break;
-            case SEMIANNUALLY:
-                executor.setExecuteAt(atualDate.plusWeeks(6L));
-                break;
-
-        }
-       repository.save(executor);
+        executor.setExecuteAt(atualDate.plusMinutes(executor.getMinutes()));
+        repository.save(executor);
     }
 
     private void process() {

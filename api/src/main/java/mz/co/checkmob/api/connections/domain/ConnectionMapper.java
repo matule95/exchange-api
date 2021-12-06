@@ -21,7 +21,6 @@ public abstract class ConnectionMapper {
     public abstract Connection mapToModel(CreateConnectionCommand command);
 
     @InheritInverseConfiguration
-    @Mapping(source = "requestExecutor",target = "frequency")
     public abstract ConnectionJson mapToJson(Connection connection);
     public abstract List<ConnectionJson> mapToJson(List<Connection> connections);
 
@@ -29,4 +28,8 @@ public abstract class ConnectionMapper {
         return new PageImpl<>(mapToJson(connections.getContent()), connections.getPageable(), connections.getTotalElements());
     }
 
+    @AfterMapping
+    public void setRequestExecutorJson(@MappingTarget ConnectionJson connectionJson, Connection connection) {
+        connectionJson.setFrequency(connection.getRequestExecutor().jsonResponse());
+    }
 }

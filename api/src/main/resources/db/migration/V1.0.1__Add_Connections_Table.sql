@@ -16,8 +16,6 @@ CREATE TABLE connections (
 
 CREATE TABLE request_executor (
             id SERIAL PRIMARY KEY,
-            frequency VARCHAR(256) DEFAULT NULL,
-            unity VARCHAR(256) DEFAULT NULL,
-            every BIGINT DEFAULT NULL,
+            minutes bigint DEFAULT NULL,
             execute_at TIMESTAMP DEFAULT NULL
 );

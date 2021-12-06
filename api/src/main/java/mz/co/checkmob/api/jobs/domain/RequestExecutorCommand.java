@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class RequestExecutorCommand {
     private RequestFrequency frequency;
-    private Integer every;
+    private Long every;
     private TimeUnity unity;
 }
