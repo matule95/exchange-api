@@ -53,42 +53,42 @@ public class ConnectionServiceImpl implements ConnectionService {
         connection.setToThirdParty(endpointB);
         connection.setToUrl(endpointB.getUrl()+command.getToUrl());
 
-//        Object noAuthMock = API.NO_AUTH.request(endpointA.getUrl()+command.getFromUrl(),
-//                command.getFromRequestType(), Object.class);
-//
-//        if(noAuthMock instanceof Collection){
-//            List<Map<String, Object>> map = (List<Map<String, Object>>) ((List) noAuthMock).parallelStream()
-//                    .map(e-> objectMapper.convertValue(e,Map.class)).collect(Collectors.toList());
-//
-//            List<MultiValueMap<String,Object>> params = new ArrayList<>();
-//
-//            for(Map<String,Object> m : map) {
-//                MultiValueMap<String,Object> p = new LinkedMultiValueMap<>();
-//                OperationType.operate(command.getParams(), m, p);
-//                params.add(p);
-//            }
-//
-//            Object object = API.NO_AUTH.request(endpointB.getUrl()+command.getToUrl(),
-//                    command.getToRequestType(), params, Object.class);
-//
-//        }else{
-//
-//            Map<String, Object> map = objectMapper.convertValue(noAuthMock,Map.class);
-//
-//            MultiValueMap<String,Object> params = new LinkedMultiValueMap<>();
-//
-//            OperationType.operate(command.getParams(), map, params);
-//
-//            Object object;
-//
-//            try{
-//                object = API.NO_AUTH.request(endpointB.getUrl()+command.getToUrl(),
-//                        command.getToRequestType(), params, Object.class);
-//            }catch(WebClientResponseException e){
-//                System.out.println(e.getMessage());
-//            }
-//
-//        }
+        Object noAuthMock = API.NO_AUTH.request(endpointA.getUrl()+command.getFromUrl(),
+                command.getFromRequestType(), Object.class);
+
+        if(noAuthMock instanceof Collection){
+            List<Map<String, Object>> map = (List<Map<String, Object>>) ((List) noAuthMock).parallelStream()
+                    .map(e-> objectMapper.convertValue(e,Map.class)).collect(Collectors.toList());
+
+            List<MultiValueMap<String,Object>> params = new ArrayList<>();
+
+            for(Map<String,Object> m : map) {
+                MultiValueMap<String,Object> p = new LinkedMultiValueMap<>();
+                OperationType.operate(command.getParams(), m, p);
+                params.add(p);
+            }
+
+            Object object = API.NO_AUTH.request(endpointB.getUrl()+command.getToUrl(),
+                    command.getToRequestType(), params, Object.class);
+
+        }else{
+
+            Map<String, Object> map = objectMapper.convertValue(noAuthMock,Map.class);
+
+            MultiValueMap<String,Object> params = new LinkedMultiValueMap<>();
+
+            OperationType.operate(command.getParams(), map, params);
+
+            Object object;
+
+            try{
+                object = API.NO_AUTH.request(endpointB.getUrl()+command.getToUrl(),
+                        command.getToRequestType(), params, Object.class);
+            }catch(WebClientResponseException e){
+                System.out.println(e.getMessage());
+            }
+
+        }
 
         return save(connection);
     }
