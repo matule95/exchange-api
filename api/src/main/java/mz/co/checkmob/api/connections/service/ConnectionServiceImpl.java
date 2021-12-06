@@ -14,6 +14,8 @@ import mz.co.checkmob.api.connections.presentation.ConnectionJson;
 import mz.co.checkmob.api.core.utils.API;
 import mz.co.checkmob.api.endpoint.domain.Endpoint;
 import mz.co.checkmob.api.endpoint.service.EndpointService;
+import mz.co.checkmob.api.jobs.domain.RequestExecutor;
+import mz.co.checkmob.api.jobs.service.RequestExecutorService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     private final ParamRepository paramRepository;
     private final EndpointService endpointService;
     private final ConnectionSpecification connectionSpecification;
-
+    private final RequestExecutorService requestExecutorService;
 
     @Override
     @Transactional
@@ -42,7 +44,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         ObjectMapper objectMapper = new ObjectMapper();
 
         Connection connection = ConnectionMapper.INSTANCE.mapToModel(command);
-
+        connection.setRequestExecutor(requestExecutorService.create(new RequestExecutor(command.getFrequency(),command.getEvery(),command.getUnity())));
         Endpoint endpointA = endpointService.findById(command.getFromThirdParty());
         connection.setFromThirdParty(endpointA);
         connection.setFromUrl(endpointA.getUrl()+command.getFromUrl());

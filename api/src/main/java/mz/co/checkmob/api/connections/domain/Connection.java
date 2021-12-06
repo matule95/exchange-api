@@ -2,6 +2,7 @@ package mz.co.checkmob.api.connections.domain;
 
 import lombok.*;
 import mz.co.checkmob.api.endpoint.domain.Endpoint;
+import mz.co.checkmob.api.jobs.domain.RequestExecutor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -53,5 +54,8 @@ public class Connection {
 
     @Column(name = "name")
     private String name;
+
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private RequestExecutor requestExecutor;
 
 }
