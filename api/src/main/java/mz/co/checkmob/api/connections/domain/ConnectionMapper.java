@@ -21,6 +21,7 @@ public abstract class ConnectionMapper {
     public abstract Connection mapToModel(CreateConnectionCommand command);
 
     @InheritInverseConfiguration
+    @Mapping(source = "requestExecutor",target = "frequency")
     public abstract ConnectionJson mapToJson(Connection connection);
     public abstract List<ConnectionJson> mapToJson(List<Connection> connections);
 

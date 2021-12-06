@@ -5,6 +5,9 @@ import lombok.Data;
 import mz.co.checkmob.api.connections.domain.Param;
 import mz.co.checkmob.api.connections.domain.RequestType;
 import mz.co.checkmob.api.endpoint.domain.Endpoint;
+import mz.co.checkmob.api.jobs.domain.RequestExecutor;
+import mz.co.checkmob.api.jobs.presentation.RequestExecutorJson;
+import mz.co.checkmob.api.jobs.service.RequestExecutorJob;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,4 +29,6 @@ public class ConnectionJson {
     private LocalDateTime createdAt;
 
     private List<Param> params;
+
+    private RequestExecutorJson frequency;
 }

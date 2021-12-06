@@ -19,5 +19,5 @@ CREATE TABLE request_executor (
             frequency VARCHAR(256) DEFAULT NULL,
             unity VARCHAR(256) DEFAULT NULL,
             every BIGINT DEFAULT NULL,
-            execute_at TIMESTAMP DEFAULT NULL,
+            execute_at TIMESTAMP DEFAULT NULL
 );

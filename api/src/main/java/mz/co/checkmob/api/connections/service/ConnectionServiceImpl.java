@@ -44,7 +44,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         ObjectMapper objectMapper = new ObjectMapper();
 
         Connection connection = ConnectionMapper.INSTANCE.mapToModel(command);
-        connection.setRequestExecutor(requestExecutorService.create(new RequestExecutor(command.getFrequency(),command.getEvery(),command.getUnity())));
+        connection.setRequestExecutor(requestExecutorService.create(command.getFrequency()));
         Endpoint endpointA = endpointService.findById(command.getFromThirdParty());
         connection.setFromThirdParty(endpointA);
         connection.setFromUrl(endpointA.getUrl()+command.getFromUrl());

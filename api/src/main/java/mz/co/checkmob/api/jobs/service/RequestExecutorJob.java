@@ -1,5 +1,9 @@
 package mz.co.checkmob.api.jobs.service;
 
+import lombok.RequiredArgsConstructor;
+import mz.co.checkmob.api.jobs.domain.RequestExecutor;
+import mz.co.checkmob.api.jobs.domain.TimeUnity;
+import mz.co.checkmob.api.jobs.persistence.RequestExecutorRepository;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
@@ -12,51 +16,61 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
-import java.util.stream.Collectors;
 
 @Configuration
 @EnableScheduling
+@RequiredArgsConstructor
 public class RequestExecutorJob implements SchedulingConfigurer {
+    private final RequestExecutorRepository repository;
     private Executor executor;
+
     public void execute() {
-        System.out.println("Awesome");
+        process();
     }
 
 
-//    private void createShipments(ScheduleShipment scheduleShipment){
-//        List<Long> allAvailableOrders = orderJpaRepository.findAllByStagesValueAndCustomerId(
-//                OrderStageValue.AVAILABLE_FOR_PICKING,scheduleShipment.getCustomerId()).stream().
-//                map(Order::getId).collect(Collectors.toList());
-//        if(!allAvailableOrders.isEmpty()){
-//            shipments.create(new CreateShipmentCommand(scheduleShipment.getAssigneeName(),scheduleShipment.getDriverName(),scheduleShipment.getCarRegistration(),
-//                    allAvailableOrders,12L,1L,null,scheduleShipment.getWarehouse(),scheduleShipment.getRoute()));
-//
-//            nextScheduledDate(scheduleShipment);
-//        }
-//    }
-//
-//    private void nextScheduledDate(ScheduleShipment scheduleShipment){
-//        if(scheduleShipment.getScheduleShipmentFrequency().equals(ScheduleShipmentFrequency.DAILY)){
-//            scheduleShipment.setSchedulingDate(scheduleShipment.getSchedulingDate().plusDays(1));
-//        }else   if(scheduleShipment.getScheduleShipmentFrequency().equals(ScheduleShipmentFrequency.WEEKLY)){
-//            scheduleShipment.setSchedulingDate(scheduleShipment.getSchedulingDate().plusWeeks(1));
-//        } else if (scheduleShipment.getScheduleShipmentFrequency().equals(ScheduleShipmentFrequency.MONTHLY)){
-//            scheduleShipment.setSchedulingDate(scheduleShipment.getSchedulingDate().plusMonths(1));
-//        }
-//        scheduleShipmentRepository.save(scheduleShipment);
-//    }
-//
-//    private void process() {
-//        try{
-////            Thread.sleep(config.getDelay());
-//            List<ScheduleShipment> listOfScheduledShipments = scheduleShipmentRepository.findBySchedulingDateLessThanEqual(LocalDateTime.now());
-//            if(!listOfScheduledShipments.isEmpty()){
-//                listOfScheduledShipments.forEach(this::createShipments);
-//            }
-//        }catch (Exception e){
-//            LOGGER.error("Error Message " + e);
-//        };
-//    }
+    private void executeRequest(RequestExecutor executor) {
+        nextScheduledDate(executor);
+    }
+
+    private void nextScheduledDate(RequestExecutor executor) {
+        LocalDateTime atualDate = executor.getExecuteAt();
+        switch (executor.getFrequency()) {
+            case DAILY:
+                if (executor.getUnity().equals(TimeUnity.MINUTE))
+                    executor.setExecuteAt(atualDate.plusMinutes(executor.getEvery()));
+                else
+                    executor.setExecuteAt(atualDate.plusHours(executor.getEvery()));
+                break;
+            case WEEKLY:
+                executor.setExecuteAt(atualDate.plusWeeks(1L));
+                break;
+            case MONTHLY:
+                executor.setExecuteAt(atualDate.plusMonths(1L));
+                break;
+            case ANNUALLY:
+                executor.setExecuteAt(atualDate.plusYears(1L));
+                break;
+            case QUARTERLY:
+                executor.setExecuteAt(atualDate.plusWeeks(3L));
+                break;
+            case SEMIANNUALLY:
+                executor.setExecuteAt(atualDate.plusWeeks(6L));
+                break;
+
+        }
+       repository.save(executor);
+    }
+
+    private void process() {
+        try {
+            List<RequestExecutor> requestExecutors = repository.findByExecuteAtLessThanEqual(LocalDateTime.now());
+            if (!requestExecutors.isEmpty()) {
+                requestExecutors.forEach(this::executeRequest);
+            }
+        } catch (Exception e) {
+        }
+    }
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
@@ -71,8 +85,7 @@ public class RequestExecutorJob implements SchedulingConfigurer {
                 new Trigger() {
                     @Override
                     public Date nextExecutionTime(TriggerContext context) {
-                        CronTrigger crontrigger = new CronTrigger("* * * * *");
-
+                        CronTrigger crontrigger = new CronTrigger("* * * * * *");
                         return crontrigger.nextExecutionTime(context);
                     }
                 }

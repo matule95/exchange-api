@@ -4,6 +4,7 @@ package mz.co.checkmob.api.connections.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mz.co.checkmob.api.jobs.domain.RequestExecutorCommand;
 import mz.co.checkmob.api.jobs.domain.RequestFrequency;
 import mz.co.checkmob.api.jobs.domain.TimeUnity;
 
@@ -38,8 +39,6 @@ public class CreateConnectionCommand {
     @NotNull
     @NotEmpty
     private String name;
-    private RequestFrequency frequency;
-    private Integer every;
-    private TimeUnity unity;
+    RequestExecutorCommand frequency;
     List<Param> params;
 }

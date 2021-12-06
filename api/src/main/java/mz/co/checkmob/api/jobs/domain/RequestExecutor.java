@@ -15,15 +15,21 @@ import java.time.LocalDateTime;
 public class RequestExecutor implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long id;
+    @Getter
+    @Setter
     private RequestFrequency frequency;
     @Setter
+    @Getter
     private LocalDateTime executeAt;
     @Getter
+    @Setter
     private Integer every;
     @Getter
+    @Setter
     private TimeUnity unity;
-    @OneToOne(mappedBy = "executor",fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "requestExecutor",fetch = FetchType.EAGER)
     private Connection connection;
 
     public RequestExecutor(RequestFrequency frequency, Integer every, TimeUnity unity) {
