@@ -52,7 +52,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         connection.setToUrl(endpointB.getUrl()+command.getToUrl());
 
         Object noAuthMock = API.NO_AUTH.request(endpointA.getUrl()+command.getFromUrl(),
-                command.getFromRequestType(), Object.class);
+                command.getFromRequestType(), null,Object.class);
 
         if(noAuthMock instanceof Collection){
             List<Map<String, Object>> map = (List<Map<String, Object>>) ((List) noAuthMock).parallelStream()
@@ -65,6 +65,10 @@ public class ConnectionServiceImpl implements ConnectionService {
                 OperationType.operate(command.getParams(), m, p);
                 params.add(p);
             }
+
+            params.parallelStream().forEach(param -> {
+
+            });
 
             Object object = API.NO_AUTH.request(endpointB.getUrl()+command.getToUrl(),
                     command.getToRequestType(), params, Object.class);

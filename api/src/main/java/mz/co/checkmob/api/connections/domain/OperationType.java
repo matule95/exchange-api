@@ -24,13 +24,20 @@ public enum OperationType {
     CONCAT {
         @Override
         public void operate(Param param, Map<String, Object> map, MultiValueMap<String, Object> params) {
-            params.add(param.getToField()[0], concat(map,param.getFromField()));
+            params.add(param.getToField()[0], concat(map,param.getFromField(), param.getDelimiter()));
         }
 
-        private String concat(Map<String, Object> map, String [] attributes){
+        private String concat(Map<String, Object> map, String [] attributes, String delimiter) {
             StringBuilder stringBuilder = new StringBuilder();
-            Arrays.stream(attributes)
-                    .forEach(attribute -> stringBuilder.append(" ").append(map.get(attribute)));
+
+            if(attributes.length > 0){
+                stringBuilder.append(map.get(attributes[0]));
+            }
+
+            for(int i = 1; i < attributes.length; i++){
+                stringBuilder.append(delimiter != null ? delimiter : " ").append(map.get(attributes[i]));
+            }
+
             return stringBuilder.toString();
         }
     }, SPLIT{
@@ -42,9 +49,13 @@ public enum OperationType {
         private MultiValueMap<String, Object> mapAttributes(Map<String, Object> values,Param param){
             MultiValueMap<String, Object> aux =  new LinkedMultiValueMap<>();
 
-                Object[] object = values.get(param.getFromField()[0]).toString().split(" ",param.getToField().length);
+                Object[] object = values.get(param.getFromField()[0]).toString().split(param.getDelimiter() != null ?
+                        param.getDelimiter() : " ",param.getToField().length);
 
                 for (int i = 0; i < param.getToField().length; i++) {
+                    if(i > object.length - 1) {
+                        break;
+                    }
                     aux.add(param.getToField()[i],object[i]);
                 }
             return aux;

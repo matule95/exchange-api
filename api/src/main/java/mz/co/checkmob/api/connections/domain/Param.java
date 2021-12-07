@@ -34,4 +34,7 @@ public class Param {
     @Column(name = "operation_type")
     private OperationType operationType;
 
+
+    private String delimiter;
+
 }

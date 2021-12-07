@@ -37,6 +37,28 @@ public class ApiService {
         }
     }
 
+    public static <T> T put(String url, Object params, Class<T> returnClassType){
+
+        if(params  instanceof MultiValueMap) {
+            return returnClassType.cast(client.put()
+                    .uri(url)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .body(BodyInserters.fromMultipartData((MultiValueMap)params))
+                    .retrieve()
+                    .bodyToMono(returnClassType)
+                    .block());
+        }else{
+            return returnClassType.cast(client.put()
+                    .uri(url)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .body(BodyInserters.fromValue(params))
+                    .retrieve()
+                    .bodyToMono(returnClassType));
+        }
+    }
+
     public static <T> T get(String url ,Class<T> returnClassType){
 
         return returnClassType.cast(client.get()
