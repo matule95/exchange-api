@@ -28,4 +28,8 @@ public abstract class ConnectionMapper {
         return new PageImpl<>(mapToJson(connections.getContent()), connections.getPageable(), connections.getTotalElements());
     }
 
+    @AfterMapping
+    public void setRequestExecutorJson(@MappingTarget ConnectionJson connectionJson, Connection connection) {
+        connectionJson.setFrequency(connection.getRequestExecutor().jsonResponse());
+    }
 }
