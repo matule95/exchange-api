@@ -2,7 +2,6 @@ package mz.co.checkmob.api.endpoint.service;
 
 import lombok.RequiredArgsConstructor;
 import mz.co.checkmob.api.company.persistence.CompanyRepository;
-import mz.co.checkmob.api.company.service.CompanyService;
 import mz.co.checkmob.api.endpoint.domain.*;
 import mz.co.checkmob.api.endpoint.domain.query.EndpointQuery;
 import mz.co.checkmob.api.endpoint.domain.query.EndpointSpecification;
@@ -27,6 +26,7 @@ public class EndpointServiceImpl implements EndpointService {
     public Endpoint create(CreateEndpointCommand command) {
         Endpoint endpoint = EndpointMapper.INSTANCE.mapToModel(command);
         endpoint.setCompany(companyRepository.findById(command.getCompanyId()).orElseThrow(EntityNotFoundException::new));
+        endpoint.authenticate();
         return endpointRepository.save(endpoint);
     }
 
