@@ -1,10 +1,7 @@
 package mz.co.checkmob.api.company.service;
 
 import lombok.RequiredArgsConstructor;
-import mz.co.checkmob.api.company.domain.Company;
-import mz.co.checkmob.api.company.domain.CompanyMapper;
-import mz.co.checkmob.api.company.domain.CreateCompanyCommand;
-import mz.co.checkmob.api.company.domain.UpdateCompanyCommand;
+import mz.co.checkmob.api.company.domain.*;
 import mz.co.checkmob.api.company.domain.query.CompanyQuery;
 import mz.co.checkmob.api.company.domain.query.CompanyQueryGateway;
 import mz.co.checkmob.api.company.persistence.CompanyRepository;
@@ -14,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.Clock;
 
 @Service
 @RequiredArgsConstructor
@@ -45,8 +43,20 @@ public class CompanyServiceImpl implements CompanyService {
         return CompanyMapper.INSTANCE.mapToJson(companyRepository.save(company));
     }
 
+@Override
+    public  CompanyJson setStatus(Long companyId, CompanyStatus status){
+        Company company = companyRepository.findById(companyId).orElseThrow(EntityNotFoundException::new);
+        company.setCompanyStatus(status);
+        return CompanyMapper.INSTANCE.mapToJson(companyRepository.save(company));
+    }
+
     @Override
     public void deleteById(Long companyId) {
         companyRepository.deleteById(companyId);
+    }
+
+    @Override
+    public long countAllCompanies() {
+        return companyRepository.count();
     }
 }

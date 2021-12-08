@@ -3,12 +3,10 @@ package mz.co.checkmob.api.user.presentation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import mz.co.checkmob.api.user.domain.CreateUserCommand;
-import mz.co.checkmob.api.user.domain.UpdateUserCommand;
-import mz.co.checkmob.api.user.domain.User;
-import mz.co.checkmob.api.user.domain.UserMapper;
+import mz.co.checkmob.api.user.domain.*;
 import mz.co.checkmob.api.user.domain.query.UserQuery;
 import mz.co.checkmob.api.user.service.UserService;
+import mz.co.checkmob.api.utils.PageJson;
 import mz.co.checkmob.api.utils.ResourceResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -49,15 +45,21 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserJson>> getUsersPage(UserQuery userQuery, Pageable pageable) {
-        Page<User> users = userService.fetchPaged(pageable, userQuery);
-        return ResponseEntity.ok(UserMapper.INSTANCE.mapToJson(users));
+    public ResponseEntity<PageJson<UserJson>> getUsersPage(UserQuery userQuery, Pageable pageable) {
+       Page<User> users = userService.fetchPaged(pageable, userQuery);
+        return ResponseEntity.ok(PageJson.of(UserMapper.INSTANCE.mapToJson(users)));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @ApiOperation("Update User Details")
-    public ResponseEntity<UserJson> update(@RequestBody @Valid UpdateUserCommand command) {
-        return  ResponseEntity.ok(UserMapper.INSTANCE.mapToJson(userService.update(command)));
+    public ResponseEntity<UserJson> update(@RequestBody @Valid UpdateUserCommand command,@PathVariable long id) {
+        return  ResponseEntity.ok(UserMapper.INSTANCE.mapToJson(userService.update(command,id)));
+    }
+
+    @PutMapping("/{id}/status")
+    @ApiOperation("Update User Status")
+    public ResponseEntity<UserJson> updateStatus(@PathVariable Long id, UserStatus status){
+        return ResponseEntity.ok(userService.setStatus(id,status));
     }
 
     @DeleteMapping("/{id}")
@@ -65,7 +67,7 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
             userService.deleteById(id);
-            return ResponseEntity.status(HttpStatus.GONE).build();
+            return ResponseEntity.status(HttpStatus.OK).body("Usuario eliminado com sucesso");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

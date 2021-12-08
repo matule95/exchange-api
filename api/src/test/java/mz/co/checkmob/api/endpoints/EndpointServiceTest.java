@@ -1,10 +1,13 @@
 package mz.co.checkmob.api.endpoints;
 
 import mz.co.checkmob.api.AbstractTest;
+import mz.co.checkmob.api.company.persistence.CompanyRepository;
+import mz.co.checkmob.api.company.service.CompanyService;
 import mz.co.checkmob.api.endpoint.domain.CreateEndpointCommand;
 import mz.co.checkmob.api.endpoint.domain.Endpoint;
 import mz.co.checkmob.api.endpoint.domain.EndpointMapper;
 import mz.co.checkmob.api.endpoint.domain.UpdateEndpointCommand;
+import mz.co.checkmob.api.endpoint.domain.query.EndpointSpecification;
 import mz.co.checkmob.api.endpoint.persistence.EndpointRepository;
 import mz.co.checkmob.api.endpoint.service.EndpointService;
 import mz.co.checkmob.api.endpoint.service.EndpointServiceImpl;
@@ -23,11 +26,15 @@ public class EndpointServiceTest extends AbstractTest {
     private EndpointService underTest;
 
     @Mock
+    private CompanyRepository companyRepository;
+
+    @Mock
     private EndpointRepository repository;
+    private EndpointSpecification endpointSpecification;
 
     @BeforeEach
     void setUp() {
-        underTest = new EndpointServiceImpl(repository);
+        underTest = new EndpointServiceImpl(repository,companyRepository,endpointSpecification);
     }
     @Test
     void shouldSaveEndpoint(){

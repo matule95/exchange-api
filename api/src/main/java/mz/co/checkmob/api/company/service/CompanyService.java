@@ -1,5 +1,6 @@
 package mz.co.checkmob.api.company.service;
 
+import mz.co.checkmob.api.company.domain.CompanyStatus;
 import mz.co.checkmob.api.company.domain.CreateCompanyCommand;
 import mz.co.checkmob.api.company.domain.UpdateCompanyCommand;
 import mz.co.checkmob.api.company.domain.query.CompanyQuery;
@@ -12,5 +13,7 @@ public interface CompanyService {
     CompanyJson fetchCompany(Long companyId);
     Page<CompanyJson> fetchCompanies(Pageable pageable, CompanyQuery companyQuery);
     CompanyJson update(UpdateCompanyCommand updateCompanyCommand, Long companyId);
+    CompanyJson setStatus (Long companyId, CompanyStatus companyStatus);
     void deleteById(Long companyId);
+    long countAllCompanies();
 }

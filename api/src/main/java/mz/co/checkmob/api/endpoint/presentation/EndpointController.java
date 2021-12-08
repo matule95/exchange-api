@@ -3,11 +3,15 @@ package mz.co.checkmob.api.endpoint.presentation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import mz.co.checkmob.api.connections.domain.query.ConnectionQuery;
+import mz.co.checkmob.api.connections.presentation.ConnectionJson;
 import mz.co.checkmob.api.endpoint.domain.CreateEndpointCommand;
 import mz.co.checkmob.api.endpoint.domain.Endpoint;
 import mz.co.checkmob.api.endpoint.domain.UpdateEndpointCommand;
 import mz.co.checkmob.api.endpoint.domain.EndpointMapper;
+import mz.co.checkmob.api.endpoint.domain.query.EndpointQuery;
 import mz.co.checkmob.api.endpoint.service.EndpointService;
+import mz.co.checkmob.api.utils.PageJson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -37,6 +41,12 @@ public class EndpointController {
         return  ResponseEntity.ok(EndpointMapper.INSTANCE.mapToJson(endpointService.update(command)));
     }
 
+    @GetMapping("/company/{id}")
+    @ApiOperation("Fetch Endpoint by Company")
+    public ResponseEntity<PageJson<EndpointJson>> getCompanyEndpoint(@PathVariable Long id, Pageable pageable) {
+        return  ResponseEntity.ok(PageJson.of(endpointService.findAllByCompanyId(id,pageable)));
+    }
+
     @GetMapping("/{id}")
     @ApiOperation("Fetches Endpoint Details By Id")
     public ResponseEntity<Object> getEndpoint(@PathVariable Long id) {
@@ -49,10 +59,12 @@ public class EndpointController {
 
     @GetMapping
     @ApiOperation("Fetch all Endpoints")
-    public ResponseEntity<Page<EndpointJson>> getAll( Pageable pageable) {
-        Page<Endpoint> endpoints = endpointService.findAll(pageable);
-        return ResponseEntity.ok(EndpointMapper.INSTANCE.mapToJson(endpoints));
+    public ResponseEntity<PageJson<EndpointJson> > getAll(Pageable pageable, EndpointQuery endpointQuery) {
+        return ResponseEntity.ok(PageJson.of(endpointService.findAll(pageable, endpointQuery)));
     }
+
+
+
 
     @DeleteMapping("/{id}")
     @ApiOperation("Deletes a Single Endpoint")

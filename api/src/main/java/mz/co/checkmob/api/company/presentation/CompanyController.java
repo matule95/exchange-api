@@ -3,11 +3,12 @@ package mz.co.checkmob.api.company.presentation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import mz.co.checkmob.api.company.domain.CompanyStatus;
 import mz.co.checkmob.api.company.domain.CreateCompanyCommand;
 import mz.co.checkmob.api.company.domain.UpdateCompanyCommand;
 import mz.co.checkmob.api.company.domain.query.CompanyQuery;
 import mz.co.checkmob.api.company.service.CompanyServiceImpl;
-import org.springframework.data.domain.Page;
+import mz.co.checkmob.api.utils.PageJson;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,14 +39,20 @@ public class CompanyController {
 
     @GetMapping
     @ApiOperation("Fetch All Companies")
-    public ResponseEntity<Page<CompanyJson>> getCompanies(CompanyQuery companyQuery, Pageable pageable) {
-        return ResponseEntity.ok(companyService.fetchCompanies(pageable,companyQuery));
+    public ResponseEntity<PageJson<CompanyJson>> getCompanies(CompanyQuery companyQuery, Pageable pageable) {
+        return ResponseEntity.ok(PageJson.of(companyService.fetchCompanies(pageable,companyQuery)));
     }
 
     @PutMapping("/{id}")
     @ApiOperation("Update Company Details")
     public ResponseEntity<CompanyJson> updateCompany(@PathVariable Long id,@RequestBody @Valid UpdateCompanyCommand command) {
         return  ResponseEntity.ok(companyService.update(command,id));
+    }
+
+    @PutMapping("/{id}/status")
+    @ApiOperation("Update Company Status")
+    public ResponseEntity<CompanyJson> updateStatus(@PathVariable Long id, CompanyStatus status){
+        return ResponseEntity.ok(companyService.setStatus(id,status));
     }
 
     @DeleteMapping("/{id}")

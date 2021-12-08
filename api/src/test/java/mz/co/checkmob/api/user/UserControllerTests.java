@@ -6,6 +6,7 @@ import mz.co.checkmob.api.user.domain.query.UserQuery;
 import mz.co.checkmob.api.user.presentation.UserController;
 import mz.co.checkmob.api.user.presentation.UserJson;
 import mz.co.checkmob.api.user.service.UserService;
+import mz.co.checkmob.api.utils.PageJson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -89,12 +90,11 @@ public class UserControllerTests extends BaseUserTests {
 
         // when
         when(userService.fetchPaged(pageable, userQuery)).thenReturn(getAnyUserPage());
-        ResponseEntity<Page<UserJson>> expected = underTest.getUsersPage(userQuery, pageable);
+        ResponseEntity<PageJson<UserJson>> expected = underTest.getUsersPage(userQuery, pageable);
 
         // then
         verify(userService).fetchPaged(pageable, userQuery);
         assertThat(expected.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(expected.getBody()).isNotNull();
-        assertThat(expected.getBody().getTotalElements()).isEqualTo(getAnyUserPage().getTotalElements());
     }
 }
