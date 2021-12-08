@@ -13,5 +13,6 @@ import java.util.Map;
 public class UpdateEndpointCommand {
     private Long id;
     private String url;
+    private String path;
     private Map<String, Object> dataReader;
 }

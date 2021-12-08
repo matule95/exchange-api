@@ -23,6 +23,7 @@ public class CreateUserCommand {
 
     @NotNull
     private UserRole role;
+    private String path;
 
     @NotNull
     @NotEmpty

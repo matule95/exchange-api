@@ -20,6 +20,7 @@ public class CreateCompanyCommand {
     @NotEmpty
     private String baseUrl;
 
+    private String path;
     @NotNull
     @NotEmpty
     private String usernameCheckmob;

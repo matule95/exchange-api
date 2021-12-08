@@ -12,6 +12,7 @@ public class UpdateCompanyCommand {
     @NotNull
     @NotEmpty
     private String name;
+    private String path;
     @NotNull
     @NotEmpty
     private String email;

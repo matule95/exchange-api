@@ -29,6 +29,7 @@ public class Endpoint {
     private Long id;
     private String name;
     private String url;
+    private String path;
 
     private AuthorizationType authenticationType;
 
