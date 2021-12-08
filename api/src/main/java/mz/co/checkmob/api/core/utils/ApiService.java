@@ -1,13 +1,11 @@
 package mz.co.checkmob.api.core.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.Map;
 
 public class ApiService {
 
@@ -18,11 +16,18 @@ public class ApiService {
             .build();
 
     public static <T> T post(String url, Object params, Class<T> returnClassType) {
+
+        String string = "";
+
+        try{
+            string = new ObjectMapper().writeValueAsString(params);
+        }catch(Exception e){e.printStackTrace();}
+
         return returnClassType.cast(client.post()
                 .uri(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(params))
+                .body(BodyInserters.fromValue(string))
                 .retrieve()
                 .bodyToMono(returnClassType)
                 .block());
@@ -30,24 +35,20 @@ public class ApiService {
 
     public static <T> T put(String url, Object params, Class<T> returnClassType) {
 
-        if (params instanceof MultiValueMap) {
-            return returnClassType.cast(client.put()
-                    .uri(url)
-                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .body(BodyInserters.fromMultipartData((MultiValueMap) params))
-                    .retrieve()
-                    .bodyToMono(returnClassType)
-                    .block());
-        } else {
-            return returnClassType.cast(client.put()
-                    .uri(url)
-                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .body(BodyInserters.fromValue(params))
-                    .retrieve()
-                    .bodyToMono(returnClassType));
-        }
+        String string = "";
+
+        try{
+            string = new ObjectMapper().writeValueAsString(params);
+        }catch(Exception e){e.printStackTrace();}
+
+        return returnClassType.cast(client.put()
+                .uri(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(string))
+                .retrieve()
+                .bodyToMono(returnClassType)
+                .block());
     }
 
     public static <T> T get(String url, Class<T> returnClassType) {

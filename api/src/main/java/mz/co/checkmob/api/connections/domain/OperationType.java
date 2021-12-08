@@ -11,20 +11,20 @@ public enum OperationType {
 
     UPPERCASE {
         @Override
-        public void operate(Param param, Map<String, Object> map, MultiValueMap<String, Object> params) {
-            params.add(param.getToField()[0], map.get(param.getFromField()[0]).toString().toUpperCase());
+        public void operate(Param param, Map<String, Object> map, Map<String, Object> params) {
+            params.put(param.getToField()[0], map.get(param.getFromField()[0]).toString().toUpperCase());
         }
     },
     LOWERCASE {
         @Override
-        public void operate(Param param, Map<String, Object> map, MultiValueMap<String, Object> params) {
-            params.add(param.getToField()[0], map.get(param.getFromField()[0]).toString().toLowerCase());
+        public void operate(Param param, Map<String, Object> map, Map<String, Object> params) {
+            params.put(param.getToField()[0], map.get(param.getFromField()[0]).toString().toLowerCase());
         }
     },
     CONCAT {
         @Override
-        public void operate(Param param, Map<String, Object> map, MultiValueMap<String, Object> params) {
-            params.add(param.getToField()[0], concat(map,param.getFromField(), param.getDelimiter()));
+        public void operate(Param param, Map<String, Object> map, Map<String, Object> params) {
+            params.put(param.getToField()[0], concat(map,param.getFromField(), param.getDelimiter()));
         }
 
         private String concat(Map<String, Object> map, String [] attributes, String delimiter) {
@@ -42,8 +42,8 @@ public enum OperationType {
         }
     }, SPLIT{
         @Override
-        public void operate(Param param, Map<String, Object> map, MultiValueMap<String, Object> params) {
-            params.addAll(mapAttributes(map, param));
+        public void operate(Param param, Map<String, Object> map, Map<String, Object> params) {
+            params.putAll(mapAttributes(map, param));
         }
 
         private MultiValueMap<String, Object> mapAttributes(Map<String, Object> values,Param param){
@@ -62,16 +62,16 @@ public enum OperationType {
         }
     };
 
-    public abstract void operate(Param commandParam, Map<String, Object> map, MultiValueMap<String,Object> params);
+    public abstract void operate(Param commandParam, Map<String, Object> map, Map<String,Object> params);
 
     public static void operate(List<Param> commandParams, Map<String, Object> map,
-                               MultiValueMap<String,Object> params){
+                               Map<String,Object> params){
 
         commandParams.parallelStream().forEach(e-> e.getOperationType().operate(e,map,params));
 
         map.forEach((k, v) -> {
             if(notContains(commandParams, k)){
-                params.add(k, v);
+                params.put(k, v);
             }
         });
     }

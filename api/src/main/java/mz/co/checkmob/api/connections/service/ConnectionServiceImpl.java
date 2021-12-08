@@ -14,14 +14,12 @@ import mz.co.checkmob.api.connections.presentation.ConnectionJson;
 import mz.co.checkmob.api.core.utils.API;
 import mz.co.checkmob.api.endpoint.domain.Endpoint;
 import mz.co.checkmob.api.endpoint.service.EndpointService;
-import mz.co.checkmob.api.jobs.domain.RequestExecutor;
 import mz.co.checkmob.api.jobs.service.RequestExecutorService;
+import org.codehaus.groovy.util.ListHashMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import javax.persistence.EntityNotFoundException;
@@ -41,8 +39,6 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Transactional
     public Connection create(CreateConnectionCommand command) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-
         Connection connection = ConnectionMapper.INSTANCE.mapToModel(command);
         connection.setRequestExecutor(requestExecutorService.create(command.getFrequency()));
         Endpoint endpointA = endpointService.findById(command.getFromThirdParty());
@@ -57,47 +53,51 @@ public class ConnectionServiceImpl implements ConnectionService {
                 command.getFromRequestType(), null,Object.class);
 
         if(noAuthMock instanceof Collection){
-            List<Map<String, Object>> map = (List<Map<String, Object>>) ((List) noAuthMock).parallelStream()
-                    .map(e-> objectMapper.convertValue(e,Map.class)).collect(Collectors.toList());
-
-            List<MultiValueMap<String,Object>> params = new ArrayList<>();
-
-            for(Map<String,Object> m : map) {
-                MultiValueMap<String,Object> p = new LinkedMultiValueMap<>();
-                OperationType.operate(command.getParams(), m, p);
-                params.add(p);
-            }
-
-            params.parallelStream().forEach(param -> {
-
-            });
-
-            Object object = API.NO_AUTH.request(endpointB.getUrl()+command.getToUrl(),
-                    command.getToRequestType(), params, Object.class);
-
+            operateSingle(noAuthMock, command, endpointB);
         }else{
-
-            Map<String, Object> map = objectMapper.convertValue(noAuthMock,Map.class);
-
-            MultiValueMap<String,Object> params = new LinkedMultiValueMap<>();
-
-            OperationType.operate(command.getParams(), map, params);
-
-            Object object;
-
-            try{
-                object = API.NO_AUTH.request(endpointB.getUrl()+command.getToUrl(),
-                        command.getToRequestType(), params, Object.class);
-            }catch(WebClientResponseException e){
-                System.out.println(e.getMessage());
-            }
-
+            operateCollection(noAuthMock, command, endpointB);
         }
 
         return save(connection);
     }
 
+    private void operateSingle(Object noAuthMock, CreateConnectionCommand command, Endpoint endpointB){
+        ObjectMapper objectMapper = new ObjectMapper();
 
+        List<Map<String, Object>> map = (List<Map<String, Object>>) ((List) noAuthMock).parallelStream()
+                .map(e-> objectMapper.convertValue(e,Map.class)).collect(Collectors.toList());
+
+        List<Map<String,Object>> params = new ArrayList<>();
+
+        for(Map<String,Object> m : map) {
+            Map<String,Object> p = new ListHashMap<>();
+            OperationType.operate(command.getParams(), m, p);
+            params.add(p);
+        }
+
+        params.parallelStream().forEach(param -> sendRequest(endpointB.getUrl()+command.getToUrl(), command.getToRequestType(), param));
+    }
+
+    private void operateCollection(Object noAuthMock, CreateConnectionCommand command, Endpoint endpointB){
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Map<String, Object> map = objectMapper.convertValue(noAuthMock,Map.class);
+
+        Map<String,Object> params = new LinkedHashMap<>();
+
+        OperationType.operate(command.getParams(), map, params);
+
+        sendRequest(endpointB.getUrl()+command.getToUrl(), command.getToRequestType(), params);
+    }
+
+    private void sendRequest(String url, RequestType requestType, Object params){
+        try{
+            API.NO_AUTH.request(url,
+                    requestType, params, Object.class);
+        }catch(WebClientResponseException e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     private Connection save(Connection connection){
         Connection con = connectionRepository.save(connection);
@@ -131,6 +131,5 @@ public class ConnectionServiceImpl implements ConnectionService {
     public long countAllConnections() {
         return connectionRepository.count();
     }
-
 
 }
