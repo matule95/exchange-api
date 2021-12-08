@@ -13,7 +13,7 @@ public enum AuthorizationType {
     }, API_KEY {
         @Override
         public <T> T authentication(String authURL, Map<String, Object> dataReader) {
-            return null;
+            return (T) dataReader;
         }
     }, BEARER_TOKEN {
         @Override
