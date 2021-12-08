@@ -36,7 +36,7 @@ public class RequestExecutorJob implements SchedulingConfigurer {
     }
 
     private void nextScheduledDate(RequestExecutor executor) {
-        LocalDateTime atualDate = executor.getExecuteAt();
+        LocalDateTime atualDate = LocalDateTime.now();
         executor.setExecuteAt(atualDate.plusMinutes(executor.getMinutes()));
         repository.save(executor);
     }

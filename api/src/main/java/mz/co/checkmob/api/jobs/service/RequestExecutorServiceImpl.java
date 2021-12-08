@@ -9,6 +9,7 @@ import mz.co.checkmob.api.jobs.persistence.RequestExecutorRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
@@ -41,12 +42,28 @@ public class RequestExecutorServiceImpl implements RequestExecutorService {
 
     @Override
     public void execute(Connection connection) {
-        fromRequestExecution(connection.getFromUrl(),connection.getFromThirdParty());
+        fromRequestExecution(connection.getFromUrl(), connection.getFromThirdParty());
     }
 
-    private Map<String,Object> fromRequestExecution(String fromURL, Endpoint endpoint){
-        Map<String,Object> authentication = endpoint.authenticate();
-        Map<String, Object> result = ApiService.get(fromURL,endpoint.getDataReader().get("header").toString(),authentication.get(endpoint.getDataReader().get("response")).toString(),endpoint.getDataReader().get("prefix").toString(),Map.class);
+    private Map<String, Object> fromRequestExecution(String fromURL, Endpoint endpoint) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        Map<String, Object> authentication = endpoint.authenticate();
+        if (authentication != null) {
+            StringBuilder headerValue = new StringBuilder();
+            String prefix = endpoint.getDataReader().get("prefix").toString();
+            String response = endpoint.getDataReader().get("response").toString();
+            String token = authentication.get(response).toString();
+            if (prefix.isEmpty()) {
+                headerValue.append(token);
+            } else {
+                headerValue.append(prefix);
+                headerValue.append(" ");
+                headerValue.append(token);
+            }
+            result = ApiService.get(fromURL, endpoint.getDataReader().get("header").toString(), headerValue.toString(), Map.class);
+        }else{
+            result = ApiService.get(fromURL,Map.class);
+        }
         return result;
     }
 
