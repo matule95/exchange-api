@@ -18,13 +18,29 @@ public enum AuthorizationType {
     }, BEARER_TOKEN {
         @Override
         public <T> T authentication(String authURL, Map<String, Object> dataReader) {
-            Map<String,Object> map = (Map<String, Object>) ApiService.post(authURL,dataReader,Object.class);
+            String auth = "authURL";
+            String prefix = "prefix";
+            String responseKey = "response";
+            String headerValue = "header";
+            dataReader.remove(auth);
+            dataReader.remove(prefix);
+            dataReader.remove(responseKey);
+            dataReader.remove(headerValue);
+            Map<String,Object> map = (Map<String, Object>) ApiService.post(authURL,dataReader,Map.class);
             return (T) map;
         }
     }, BASIC_AUTH {
         @Override
         public <T> T authentication(String authURL, Map<String, Object> dataReader) {
-            Map<String,Object> map = (Map<String, Object>) ApiService.post(authURL,dataReader,Object.class);
+            String auth = "authURL";
+            String prefix = "prefix";
+            String responseKey = "response";
+            String headerValue = "header";
+            dataReader.remove(auth);
+            dataReader.remove(prefix);
+            dataReader.remove(responseKey);
+            dataReader.remove(headerValue);
+            Map<String,Object> map = (Map<String, Object>) ApiService.post(authURL,dataReader,Map.class);
             return (T) map;
         }
     },OAUTH2{

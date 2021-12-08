@@ -24,6 +24,7 @@ public class RequestExecutor implements Serializable {
     @Setter
     @Getter
     private LocalDateTime executeAt;
+    @Getter
     @OneToOne(mappedBy = "requestExecutor",fetch = FetchType.EAGER)
     private Connection connection;
 

@@ -22,6 +22,7 @@ import java.util.concurrent.Executor;
 @RequiredArgsConstructor
 public class RequestExecutorJob implements SchedulingConfigurer {
     private final RequestExecutorRepository repository;
+    private final RequestExecutorService service;
     private Executor executor;
 
     public void execute() {
@@ -30,6 +31,7 @@ public class RequestExecutorJob implements SchedulingConfigurer {
 
 
     private void executeRequest(RequestExecutor executor) {
+        service.execute(executor.getConnection());
         nextScheduledDate(executor);
     }
 
@@ -46,6 +48,7 @@ public class RequestExecutorJob implements SchedulingConfigurer {
                 requestExecutors.forEach(this::executeRequest);
             }
         } catch (Exception e) {
+            // Some stuff
         }
     }
 
