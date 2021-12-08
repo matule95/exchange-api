@@ -17,17 +17,17 @@ public class ApiService {
 
     public static <T> T post(String url, Object params, Class<T> returnClassType) {
 
-        String string = "";
+        String body = "";
 
         try{
-            string = new ObjectMapper().writeValueAsString(params);
+            body = new ObjectMapper().writeValueAsString(params);
         }catch(Exception e){e.printStackTrace();}
 
         return returnClassType.cast(client.post()
                 .uri(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(string))
+                .body(BodyInserters.fromValue(body))
                 .retrieve()
                 .bodyToMono(returnClassType)
                 .block());
@@ -35,17 +35,17 @@ public class ApiService {
 
     public static <T> T put(String url, Object params, Class<T> returnClassType) {
 
-        String string = "";
+        String body = "";
 
         try{
-            string = new ObjectMapper().writeValueAsString(params);
+            body = new ObjectMapper().writeValueAsString(params);
         }catch(Exception e){e.printStackTrace();}
 
         return returnClassType.cast(client.put()
                 .uri(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(string))
+                .body(BodyInserters.fromValue(body))
                 .retrieve()
                 .bodyToMono(returnClassType)
                 .block());

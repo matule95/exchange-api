@@ -23,19 +23,7 @@ public enum AuthorizationType {
     }, BASIC_AUTH {
         @Override
         public <T> T authentication(String authURL, Map<String, Object> dataReader) {
-            StringBuilder requestBody = new StringBuilder("{\n");
-            dataReader.entrySet().forEach(data ->{
-                requestBody.append("\"");
-                requestBody.append(data.getKey());
-                requestBody.append("\"");
-                requestBody.append(":");
-                requestBody.append(data.getValue());
-                requestBody.append(",\n");
-            });
-            requestBody.append("}");
-            int index = requestBody.lastIndexOf(",");
-            requestBody.replace(index,index+1,"");
-            Map<String,Object> map = (Map<String, Object>) ApiService.post(authURL,requestBody.toString(),Object.class);
+            Map<String,Object> map = (Map<String, Object>) ApiService.post(authURL,dataReader,Object.class);
             return (T) map;
         }
     },OAUTH2{

@@ -50,15 +50,16 @@ public class Endpoint {
     public Map<String,Object> authenticate(){
         String auth = "authURL";
         String prefix = "prefix";
+        String responseKey = "response";
         String responseValue = dataReader.get("response").toString();
         String headerValue = "header";
         Object authenticationURL = this.dataReader.getOrDefault(auth,"");
         this.dataReader.remove(auth);
         this.dataReader.remove(prefix);
+        this.dataReader.remove(responseKey);
         this.dataReader.remove(responseValue);
         this.dataReader.remove(headerValue);
         Map<String,Object> map= this.authenticationType.authentication(String.valueOf(authenticationURL),dataReader);
-        System.out.println(map.get(responseValue));
         return map;
     }
 }

@@ -16,6 +16,5 @@ public class EndpointJson {
     private String url;
     private Company company;
     private AuthorizationType authenticationType;
-    private Map<String, Object> dataReader;
     private LocalDateTime createdAt;
 }
