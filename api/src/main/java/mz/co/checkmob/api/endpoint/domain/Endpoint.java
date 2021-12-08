@@ -12,6 +12,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 @Entity
@@ -50,17 +51,8 @@ public class Endpoint {
 
     public Map<String,Object> authenticate(){
         String auth = "authURL";
-        String prefix = "prefix";
-        String responseKey = "response";
-        String responseValue = dataReader.get("response").toString();
-        String headerValue = "header";
         Object authenticationURL = this.dataReader.getOrDefault(auth,"");
-        this.dataReader.remove(auth);
-        this.dataReader.remove(prefix);
-        this.dataReader.remove(responseKey);
-        this.dataReader.remove(responseValue);
-        this.dataReader.remove(headerValue);
-        Map<String,Object> map= this.authenticationType.authentication(String.valueOf(authenticationURL),dataReader);
-        return map;
+        Map<String,Object> result= this.authenticationType.authentication(String.valueOf(authenticationURL),new HashMap<>(dataReader));
+        return result;
     }
 }
