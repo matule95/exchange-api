@@ -60,6 +60,16 @@ public class ApiService {
                 .bodyToMono(returnClassType)
                 .block());
     }
+    public static <T> T get(String url,String headerValue,String value,String prefix, Class<T> returnClassType) {
+
+        return returnClassType.cast(client.get()
+                .uri(url)
+                .header(headerValue,prefix+" "+value)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(returnClassType)
+                .block());
+    }
 
 }
 
