@@ -50,9 +50,7 @@ public class Endpoint {
     private LocalDateTime deletedAt;
 
     public Map<String,Object> authenticate(){
-        String auth = "authURL";
-        Object authenticationURL = this.dataReader.getOrDefault(auth,"");
-        Map<String,Object> result= this.authenticationType.authentication(String.valueOf(authenticationURL),new HashMap<>(dataReader));
+        Map<String,Object> result= this.authenticationType.authentication(new HashMap<>(dataReader));
         return result;
     }
 }
