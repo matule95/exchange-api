@@ -18,7 +18,8 @@ public enum AuthorizationType {
     }, BEARER_TOKEN {
         @Override
         public <T> T authentication(String authURL, Map<String, Object> dataReader) {
-            return null;
+            Map<String,Object> map = (Map<String, Object>) ApiService.post(authURL,dataReader,Object.class);
+            return (T) map;
         }
     }, BASIC_AUTH {
         @Override
