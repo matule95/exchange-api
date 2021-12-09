@@ -68,21 +68,14 @@ public enum OperationType {
         public void operate(Param commandParam, Map<String, Object> map, Map<String, Object> params) {
             ObjectMapper objectMapper = new ObjectMapper();
 
-            Map<String,Object> aux = new LinkedHashMap<>();
+            Object object = API.NO_AUTH.request(commandParam.getUrl(), commandParam.getRequestType(),null, Object.class);
 
-            Object object = API.NO_AUTH.request(commandParam.getAuxRequest().getUrl(), commandParam.getAuxRequest().getRequestType(),null, Object.class);
             Map<String, Object> requestData = objectMapper.convertValue(object,Map.class);
 
 
-            operate(commandParam.getAuxRequest().getParams(),requestData,aux);;
-
-            params.putAll(aux);
-
-
-            System.out.println(aux);
-
-
-
+            for(int i = 0; i<commandParam.getToField().length; i++){
+                params.put(commandParam.getToField()[i],requestData.get(commandParam.getFromField()[i]));
+            }
         }
     };
 
