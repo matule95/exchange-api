@@ -6,13 +6,13 @@ import mz.co.checkmob.api.endpoint.domain.Endpoint;
 
 import java.util.Map;
 
-public class OAuthTwoAuthentication implements Authentication{
+public class ApiKeyRequest implements Authentication{
     @Override
     public Map<String, Object> authenticate(RequestType type, String URL, Endpoint endpoint) {
-        if (endpoint.getAuthenticationType().equals(AuthorizationType.OAUTH2)){
-            return execute(type, URL, endpoint);
+        if (endpoint.getAuthenticationType().equals(AuthorizationType.API_KEY)){
+            return execute(type,URL,endpoint);
         }
-        return null;
+        return new OAuthTwoAuthentication().authenticate(type, URL, endpoint);
     }
 
     @Override

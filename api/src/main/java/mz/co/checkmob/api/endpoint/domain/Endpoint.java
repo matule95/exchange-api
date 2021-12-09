@@ -50,7 +50,4 @@ public class Endpoint {
 
     private LocalDateTime deletedAt;
 
-    public Map<String,Object> authenticate(){
-        return new NoAuthAuthentication().authenticate(this);
-    }
 }
