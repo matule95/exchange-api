@@ -26,7 +26,7 @@ public class EndpointServiceImpl implements EndpointService {
     public Endpoint create(CreateEndpointCommand command) {
         Endpoint endpoint = EndpointMapper.INSTANCE.mapToModel(command);
         endpoint.setCompany(companyRepository.findById(command.getCompanyId()).orElseThrow(EntityNotFoundException::new));
-        endpoint.authenticate();
+        //endpoint.authenticate();
         return endpointRepository.save(endpoint);
     }
 

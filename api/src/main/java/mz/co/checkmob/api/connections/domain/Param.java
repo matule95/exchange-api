@@ -37,4 +37,8 @@ public class Param {
 
     private String delimiter;
 
+    @ManyToOne
+    @JoinColumn(name = "aux_request_id")
+    private AuxRequest auxRequest;
+
 }
