@@ -18,7 +18,7 @@ public class UpdateUserCommand {
     @NotEmpty
     @Size(min = 2)
     private String name;
-
+    private String path;
     @NotNull
     private UserRole role;
 }

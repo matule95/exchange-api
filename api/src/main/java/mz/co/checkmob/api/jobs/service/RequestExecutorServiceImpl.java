@@ -2,7 +2,8 @@ package mz.co.checkmob.api.jobs.service;
 
 import lombok.RequiredArgsConstructor;
 import mz.co.checkmob.api.connections.domain.Connection;
-import mz.co.checkmob.api.core.utils.ApiService;
+import mz.co.checkmob.api.connections.domain.RequestType;
+import mz.co.checkmob.api.endpoint.request.NoAuthRequest;
 import mz.co.checkmob.api.endpoint.domain.Endpoint;
 import mz.co.checkmob.api.jobs.domain.*;
 import mz.co.checkmob.api.jobs.persistence.RequestExecutorRepository;
@@ -41,13 +42,14 @@ public class RequestExecutorServiceImpl implements RequestExecutorService {
 
     @Override
     public void execute(Connection connection) {
-        fromRequestExecution(connection.getFromUrl(),connection.getFromThirdParty());
+        fromRequestExecution(connection.getFromUrl(), connection.getFromThirdParty());
+    }
+    private Map<String,Object> doRequest(RequestType type,String URL,Endpoint endpoint){
+        return new NoAuthRequest().authenticate(type, URL, endpoint);
     }
 
-    private Map<String,Object> fromRequestExecution(String fromURL, Endpoint endpoint){
-        Map<String,Object> authentication = endpoint.authenticate();
-        Map<String, Object> result = ApiService.get(fromURL,endpoint.getDataReader().get("header").toString(),authentication.get(endpoint.getDataReader().get("response")).toString(),endpoint.getDataReader().get("prefix").toString(),Map.class);
-        return result;
+    private Map<String, Object> fromRequestExecution(String fromURL, Endpoint endpoint) {
+        return doRequest(RequestType.GET,fromURL,endpoint);
     }
 
     @Override
