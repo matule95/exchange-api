@@ -1,9 +1,12 @@
 package mz.co.checkmob.api.connections.domain;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import mz.co.checkmob.api.core.utils.API;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +63,20 @@ public enum OperationType {
                 }
             return aux;
         }
+    }, REQUEST{
+        @Override
+        public void operate(Param commandParam, Map<String, Object> map, Map<String, Object> params) {
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            Object object = API.NO_AUTH.request(commandParam.getUrl(), commandParam.getRequestType(),null, Object.class);
+
+            Map<String, Object> requestData = objectMapper.convertValue(object,Map.class);
+
+
+            for(int i = 0; i<commandParam.getToField().length; i++){
+                params.put(commandParam.getToField()[i],requestData.get(commandParam.getFromField()[i]));
+            }
+        }
     };
 
     public abstract void operate(Param commandParam, Map<String, Object> map, Map<String,Object> params);
@@ -80,5 +97,7 @@ public enum OperationType {
         return !params.parallelStream()
                 .anyMatch(param -> Arrays.asList(param.getFromField()).contains(key));
     }
+
+
 
 }

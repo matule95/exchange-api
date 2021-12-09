@@ -104,7 +104,9 @@ CREATE TABLE params (
             id BIGINT PRIMARY KEY DEFAULT nextval('params_id_sequence'),
             from_field    VARCHAR(255),
             to_field      VARCHAR(255),
+            url VARCHAR(255),
             operation_type VARCHAR(255),
+            request_type VARCHAR(255),
             delimiter VARCHAR(31),
             connection_id BIGINT
 );
@@ -116,5 +118,3 @@ USING
 CASE
 WHEN company_status IS NULL THEN NULL WHEN company_status THEN 1 ELSE 2
 END;
-
-

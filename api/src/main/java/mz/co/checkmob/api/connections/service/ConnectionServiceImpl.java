@@ -53,15 +53,15 @@ public class ConnectionServiceImpl implements ConnectionService {
                 command.getFromRequestType(), null,Object.class);
 
         if(noAuthMock instanceof Collection){
-            operateSingle(noAuthMock, command, endpointB);
-        }else{
             operateCollection(noAuthMock, command, endpointB);
+        }else{
+            operateSingle(noAuthMock, command, endpointB);
         }
 
         return save(connection);
     }
 
-    private void operateSingle(Object noAuthMock, CreateConnectionCommand command, Endpoint endpointB){
+    private void operateCollection(Object noAuthMock, CreateConnectionCommand command, Endpoint endpointB){
         ObjectMapper objectMapper = new ObjectMapper();
 
         List<Map<String, Object>> map = (List<Map<String, Object>>) ((List) noAuthMock).parallelStream()
@@ -78,14 +78,14 @@ public class ConnectionServiceImpl implements ConnectionService {
         params.parallelStream().forEach(param -> sendRequest(endpointB.getUrl()+command.getToUrl(), command.getToRequestType(), param));
     }
 
-    private void operateCollection(Object noAuthMock, CreateConnectionCommand command, Endpoint endpointB){
+    private void operateSingle(Object noAuthMock, CreateConnectionCommand command, Endpoint endpointB){
         ObjectMapper objectMapper = new ObjectMapper();
 
-        Map<String, Object> map = objectMapper.convertValue(noAuthMock,Map.class);
+        Map<String, Object> requestData = objectMapper.convertValue(noAuthMock,Map.class);
 
         Map<String,Object> params = new LinkedHashMap<>();
 
-        OperationType.operate(command.getParams(), map, params);
+        OperationType.operate(command.getParams(), requestData, params);
 
         sendRequest(endpointB.getUrl()+command.getToUrl(), command.getToRequestType(), params);
     }

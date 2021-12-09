@@ -37,4 +37,11 @@ public class Param {
 
     private String delimiter;
 
+    @Column(name = "url")
+    private String url;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "request_type")
+    private RequestType requestType;
+
 }
