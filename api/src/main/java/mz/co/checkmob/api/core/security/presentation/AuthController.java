@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RequiredArgsConstructor
 @RestController
-@Api(tags = "AUTH", description = "Authentication endpoints", authorizations = {})
+@Api(tags = "AUTH", description = "Request endpoints", authorizations = {})
 @CrossOrigin
 @RequestMapping("api/v1/auth")
 public class AuthController {
