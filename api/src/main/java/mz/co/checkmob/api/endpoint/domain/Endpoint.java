@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import mz.co.checkmob.api.authorization.domain.AuthorizationType;
 import mz.co.checkmob.api.company.domain.Company;
+import mz.co.checkmob.api.endpoint.authentication.NoAuthAuthentication;
 import mz.co.checkmob.api.utils.JsonObjectConverter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
@@ -50,7 +51,6 @@ public class Endpoint {
     private LocalDateTime deletedAt;
 
     public Map<String,Object> authenticate(){
-        Map<String,Object> result= this.authenticationType.authentication(new HashMap<>(dataReader));
-        return result;
+        return new NoAuthAuthentication().authenticate(this);
     }
 }
