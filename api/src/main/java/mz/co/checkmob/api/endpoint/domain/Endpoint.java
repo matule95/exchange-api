@@ -12,7 +12,6 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 @Entity
@@ -30,6 +29,7 @@ public class Endpoint {
     private Long id;
     private String name;
     private String url;
+    private String path;
 
     private AuthorizationType authenticationType;
 
@@ -48,10 +48,4 @@ public class Endpoint {
 
     private LocalDateTime deletedAt;
 
-    public Map<String,Object> authenticate(){
-        String auth = "authURL";
-        Object authenticationURL = this.dataReader.getOrDefault(auth,"");
-        Map<String,Object> result= this.authenticationType.authentication(String.valueOf(authenticationURL),new HashMap<>(dataReader));
-        return result;
-    }
 }

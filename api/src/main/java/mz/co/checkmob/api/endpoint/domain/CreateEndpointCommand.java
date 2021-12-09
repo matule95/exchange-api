@@ -14,6 +14,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class CreateEndpointCommand {
     private String name;
+    private String path;
     private String url;
     private Long companyId;
     private AuthorizationType authenticationType;

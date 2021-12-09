@@ -34,6 +34,7 @@ public class User extends AbstractAggregateRoot<User> implements UserDetails {
     private Long id;
     private String name;
     private String email;
+    private String path;
     private String username;
     private String password;
 

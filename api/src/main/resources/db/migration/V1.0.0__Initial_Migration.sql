@@ -2,6 +2,7 @@ CREATE SEQUENCE users_id_sequence START 1;
 CREATE TABLE users (
     id BIGINT PRIMARY KEY DEFAULT nextval('users_id_sequence'),
     name VARCHAR(256) ,
+    path VARCHAR(256) ,
     username VARCHAR(256) NOT NULL,
     email VARCHAR(256) NOT NULL UNIQUE,
     role VARCHAR(32) NOT NULL,
@@ -40,6 +41,7 @@ CREATE TABLE companies (
     name VARCHAR(256) NOT NULL,
     email VARCHAR(256) NOT NULL UNIQUE,
     base_url VARCHAR(256) NOT NULL,
+    path VARCHAR(256) ,
     company_status BOOLEAN DEFAULT TRUE,
     username_checkmob VARCHAR(256) NOT NULL,
     password_checkmob VARCHAR(256) NOT NULL,
@@ -65,6 +67,7 @@ CREATE TABLE endpoints (
     id BIGINT PRIMARY KEY DEFAULT nextval('endpoints_id_sequence'),
     name VARCHAR(32) NOT NULL,
     url VARCHAR(256) NOT NULL,
+    path VARCHAR(256) ,
     company_id BIGINT NOT NULL,
     authentication_type VARCHAR(256) NOT NULL,
     data_reader VARCHAR(256) NULL,
