@@ -26,7 +26,7 @@ public class Currency {
     private String name;
     @Getter
     @Setter
-    private String abbreviation;
+    private String isoCode;
     @CreationTimestamp
     @Getter
     private LocalDateTime createdAt;

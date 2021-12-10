@@ -9,11 +9,14 @@ import mz.co.exchange.api.rate.domain.Rate;
 import mz.co.exchange.api.rate.domain.RateMapper;
 import mz.co.exchange.api.rate.domain.UpdateRateCommand;
 import mz.co.exchange.api.rate.persistence.RateRepository;
+import mz.co.exchange.api.rate.presentation.CurrencyRateJson;
+import mz.co.exchange.api.rate.presentation.ExchangeJson;
 import mz.co.exchange.api.rate.presentation.RateJson;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,8 +35,14 @@ public class RateServiceImpl implements RateService{
     }
 
     @Override
-    public List<Rate> getBaseCurrencyRates(Long baseCurrencyId) {
-        return repository.findByBaseCurrencyId(baseCurrencyId);
+    public ExchangeJson getBaseCurrencyRates(Long baseCurrencyId) {
+        ExchangeJson exchangeJson = new ExchangeJson();
+        Currency currency = currencyService.findById(baseCurrencyId);
+        exchangeJson.setDateTime(LocalDateTime.now());
+        exchangeJson.setBaseCurrency(currency.getIsoCode());
+        exchangeJson.setResult("success");
+        exchangeJson.setRates(MAPPER.mapToCurrencyJson(repository.findByBaseCurrencyId(baseCurrencyId)));
+        return exchangeJson;
     }
 
     public Rate findByBaseCurrencyAndTargetCurrency(Long baseCurrencyId,Long targetCurrencyId){

@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class CreateCurrencyCommand {
-    private String abbreviation;
+    private String isoCode;
     private String name;
 }

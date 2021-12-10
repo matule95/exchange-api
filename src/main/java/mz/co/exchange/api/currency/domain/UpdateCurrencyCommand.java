@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class UpdateCurrencyCommand {
-    private String abbreviation;
+    private String isoCode;
     private String name;
 }

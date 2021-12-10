@@ -52,12 +52,12 @@ CREATE TABLE companies (
 CREATE TABLE currencies (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(256) NOT NULL,
-    abbreviation VARCHAR(256) NOT NULL,
+    iso_code VARCHAR(6) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL,
     deleted_at TIMESTAMP NULL,
 
-    UNIQUE (name,abbreviation)
+    UNIQUE (name)
 );
 
 CREATE TABLE rates (

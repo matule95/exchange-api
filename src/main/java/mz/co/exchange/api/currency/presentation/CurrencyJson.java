@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class CurrencyJson {
     private Long id;
     private String name;
-    private String abbreviation;
+    private String isoCode;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

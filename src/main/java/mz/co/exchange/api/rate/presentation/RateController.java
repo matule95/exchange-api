@@ -32,7 +32,7 @@ public class RateController {
         return ResponseEntity.status(HttpStatus.OK).body(service.update(command,id));
     }
     @GetMapping("/exchange/{baseCurrencyId}")
-    @ApiOperation("Get currency exchange")
+    @ApiOperation("Currency Rate Consult")
     public ResponseEntity<?> getCurrencyRates(@PathVariable Long baseCurrencyId){
         return ResponseEntity.status(HttpStatus.OK).body(service.getBaseCurrencyRates(baseCurrencyId));
     }
