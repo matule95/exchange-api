@@ -1,18 +1,15 @@
-package mz.co.exchange.api.company.domain;
+package mz.co.exchange.api.provider.domain;
 
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 @Data
-public class UpdateCompanyCommand {
-    private Long id;
+public class CreateProviderCommand {
     @NotNull
     @NotEmpty
     private String name;
-    private String path;
     @NotNull
     @NotEmpty
     private String email;

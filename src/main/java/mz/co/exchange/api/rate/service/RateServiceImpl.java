@@ -14,6 +14,8 @@ import mz.co.exchange.api.rate.persistence.RateRepository;
 import mz.co.exchange.api.rate.presentation.CurrencyRateJson;
 import mz.co.exchange.api.rate.presentation.ExchangeJson;
 import mz.co.exchange.api.rate.presentation.RateJson;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -48,6 +50,7 @@ public class RateServiceImpl implements RateService{
         ExchangeJson exchangeJson = new ExchangeJson();
         Currency currency = currencyService.findById(baseCurrencyId);
         exchangeJson.setDateTime(LocalDateTime.now());
+        exchangeJson.setProvider(currency.getProvider().getName());
         exchangeJson.setBaseCurrency(currency.getIsoCode());
         exchangeJson.setResult("success");
         exchangeJson.setRates(MAPPER.mapToCurrencyJson(repository.findByBaseCurrencyId(baseCurrencyId)));
@@ -69,6 +72,16 @@ public class RateServiceImpl implements RateService{
             return MAPPER.mapToJson(rate);
         }
         throw new SQLException("Could not update rate");
+    }
+
+    @Override
+    public RateJson fetchRate(Long rateId) {
+        return MAPPER.mapToJson(findById(rateId));
+    }
+
+    @Override
+    public Page<RateJson> fetchRates(Pageable pageable) {
+        return MAPPER.mapToJson(repository.findAll(pageable));
     }
 
     public Rate findById(Long id){

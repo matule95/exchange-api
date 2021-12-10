@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class UpdateCurrencyCommand {
     private String isoCode;
+    private Long providerId;
     private String name;
 }

@@ -1,12 +1,12 @@
-package mz.co.exchange.api.company;
+package mz.co.exchange.api.provider;
 
-import mz.co.exchange.api.company.domain.Company;
-import mz.co.exchange.api.company.domain.query.CompanyQuery;
-import mz.co.exchange.api.company.domain.query.CompanyQueryGateway;
-import mz.co.exchange.api.company.persistence.CompanyRepository;
-import mz.co.exchange.api.company.presentation.CompanyJson;
-import mz.co.exchange.api.company.service.CompanyService;
-import mz.co.exchange.api.company.service.CompanyServiceImpl;
+import mz.co.exchange.api.provider.domain.Provider;
+import mz.co.exchange.api.provider.domain.query.ProviderQuery;
+import mz.co.exchange.api.provider.domain.query.ProviderQueryGateway;
+import mz.co.exchange.api.provider.persistence.ProviderRepository;
+import mz.co.exchange.api.provider.presentation.ProviderJson;
+import mz.co.exchange.api.provider.service.ProviderService;
+import mz.co.exchange.api.provider.service.ProviderServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,22 +23,22 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class CompanyServiceTest extends BaseCompanyTest{
+public class ProviderServiceTest extends BaseCompanyTest{
     @Autowired
-    private CompanyService service;
+    private ProviderService service;
     @Mock
-    private CompanyRepository repository;
+    private ProviderRepository repository;
     @Mock
-    private CompanyQueryGateway companyQueryGateway;
+    private ProviderQueryGateway providerQueryGateway;
     @Captor
-    private ArgumentCaptor<Company> captor;
+    private ArgumentCaptor<Provider> captor;
 
-    public CompanyServiceTest() {
+    public ProviderServiceTest() {
     }
 
     @BeforeEach
     void initializer(){
-        service = new CompanyServiceImpl(repository,companyQueryGateway);
+        service = new ProviderServiceImpl(repository, providerQueryGateway);
     }
     @Test
     void shouldSaveCompany(){
@@ -49,19 +49,19 @@ public class CompanyServiceTest extends BaseCompanyTest{
     }
     @Test
     void shouldListCompanies(){
-        CompanyQuery companyQuery = new CompanyQuery();
+        ProviderQuery providerQuery = new ProviderQuery();
         Pageable pageable = Pageable.unpaged();
-        Mockito.when(companyQueryGateway.executeQuery(pageable,companyQuery)).thenReturn(getAnyCompanyPage());
-        Page<CompanyJson> companies = service.fetchCompanies(pageable,companyQuery);
-        Mockito.verify(companyQueryGateway).executeQuery(pageable,companyQuery);
+        Mockito.when(providerQueryGateway.executeQuery(pageable, providerQuery)).thenReturn(getAnyCompanyPage());
+        Page<ProviderJson> companies = service.fetchProviders(pageable, providerQuery);
+        Mockito.verify(providerQueryGateway).executeQuery(pageable, providerQuery);
         Assertions.assertEquals(companies.getTotalElements(),getAnyCompanyPage().getTotalElements());
     }
     @Test
     void shouldGetCompanyById(){
         Mockito.when(repository.findById(1L)).thenReturn(Optional.of(getAnyCompany()));
-        CompanyJson companyJson = service.fetchCompany(1L);
+        ProviderJson providerJson = service.fetchProvider(1L);
         Mockito.verify(repository).findById(1L);
-        Assertions.assertNotNull(companyJson);
+        Assertions.assertNotNull(providerJson);
     }
     @Test
     void shouldUpdateCompany(){

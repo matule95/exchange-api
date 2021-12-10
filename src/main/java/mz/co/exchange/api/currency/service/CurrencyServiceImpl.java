@@ -1,7 +1,6 @@
 package mz.co.exchange.api.currency.service;
 
 import lombok.RequiredArgsConstructor;
-import mz.co.exchange.api.company.domain.CompanyMapper;
 import mz.co.exchange.api.currency.domain.CreateCurrencyCommand;
 import mz.co.exchange.api.currency.domain.Currency;
 import mz.co.exchange.api.currency.domain.CurrencyMapper;

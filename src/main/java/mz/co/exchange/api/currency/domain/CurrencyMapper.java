@@ -1,10 +1,5 @@
 package mz.co.exchange.api.currency.domain;
 
-import mz.co.exchange.api.company.domain.Company;
-import mz.co.exchange.api.company.domain.CompanyStatus;
-import mz.co.exchange.api.company.domain.CreateCompanyCommand;
-import mz.co.exchange.api.company.domain.UpdateCompanyCommand;
-import mz.co.exchange.api.company.presentation.CompanyJson;
 import mz.co.exchange.api.currency.presentation.CurrencyJson;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -32,6 +27,7 @@ public abstract class CurrencyMapper {
     public abstract void cloneModel(@MappingTarget Currency currency, Currency currencySource);
 
     @InheritInverseConfiguration
+    @Mapping(source = "provider.name",target = "provider")
     public abstract CurrencyJson mapToJson(Currency currency);
     public abstract List<CurrencyJson> mapToJson(List<Currency> currencies);
 

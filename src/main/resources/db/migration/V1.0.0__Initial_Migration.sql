@@ -51,6 +51,7 @@ CREATE TABLE companies (
 
 CREATE TABLE currencies (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    provider_id BIGINT,
     name VARCHAR(256) NOT NULL,
     iso_code VARCHAR(6) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -70,3 +71,22 @@ CREATE TABLE rates (
     updated_at TIMESTAMP NULL,
     deleted_at TIMESTAMP NULL
 );
+
+CREATE TABLE rate_history (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    rate_id BIGINT,
+    sale FLOAT NOT NULL,
+    purchase FLOAT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE providers (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(256) NOT NULL,
+    email VARCHAR(256) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL,
+    deleted_at TIMESTAMP NULL
+);
+

@@ -1,9 +1,9 @@
-package mz.co.exchange.api.company.domain.query;
+package mz.co.exchange.api.provider.domain.query;
 
 import lombok.Data;
 
 @Data
-public class CompanyQuery {
+public class ProviderQuery {
     private String name;
     private String email;
 }

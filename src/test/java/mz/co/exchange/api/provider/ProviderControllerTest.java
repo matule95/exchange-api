@@ -1,11 +1,11 @@
-package mz.co.exchange.api.company;
+package mz.co.exchange.api.provider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mz.co.exchange.api.company.domain.Company;
-import mz.co.exchange.api.company.domain.CompanyMapper;
-import mz.co.exchange.api.company.domain.UpdateCompanyCommand;
-import mz.co.exchange.api.company.domain.query.CompanyQuery;
-import mz.co.exchange.api.company.service.CompanyServiceImpl;
+import mz.co.exchange.api.provider.domain.Provider;
+import mz.co.exchange.api.provider.domain.ProviderMapper;
+import mz.co.exchange.api.provider.domain.UpdateProviderCommand;
+import mz.co.exchange.api.provider.domain.query.ProviderQuery;
+import mz.co.exchange.api.provider.service.ProviderServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,39 +31,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CompanyControllerTest extends BaseCompanyTest{
+public class ProviderControllerTest extends BaseCompanyTest{
     @Autowired
     MockMvc mockMvc;
     @MockBean
-    CompanyServiceImpl companyService;
+    ProviderServiceImpl companyService;
 
     @Test
     @WithMockUser
     void shouldListAllCompany() throws Exception {
-        CompanyQuery companyQuery = new CompanyQuery();
+        ProviderQuery providerQuery = new ProviderQuery();
         Pageable pageable = Pageable.unpaged();
-        Mockito.when(companyService.fetchCompanies(pageable,companyQuery)).thenReturn(getAnyCompanyPage());
-        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/companies",pageable,companyQuery));
+        Mockito.when(companyService.fetchProviders(pageable, providerQuery)).thenReturn(getAnyCompanyPage());
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/companies",pageable, providerQuery));
         result.andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
     void shouldShowCompanyDetails() throws Exception {
-        Company company = getAnyCompany();
-        company.setId(1L);
-        given(companyService.fetchCompany(any())).willReturn(CompanyMapper.INSTANCE.mapToJson(company));
+        Provider provider = getAnyCompany();
+        provider.setId(1L);
+        given(companyService.fetchProvider(any())).willReturn(ProviderMapper.INSTANCE.mapToJson(provider));
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get(String.format("/api/v1/companies/%s", ThreadLocalRandom.current().nextLong(10,100))));
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(company.getId().toString()));
+                .andExpect(jsonPath("id").value(provider.getId().toString()));
     }
 
     @Test
     @WithMockUser
     void shouldCreateCompany() throws Exception {
-        Company company = getAnyCompany();
-        company.setId(1L);
-        given(companyService.create(any())).willReturn(CompanyMapper.INSTANCE.mapToJson(company));
+        Provider provider = getAnyCompany();
+        provider.setId(1L);
+        given(companyService.create(any())).willReturn(ProviderMapper.INSTANCE.mapToJson(provider));
         String data = new ObjectMapper().writeValueAsString(getCreateCompanyCommand());
         ResultActions perform = mockMvc.perform(post("/api/v1/companies")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -77,12 +77,12 @@ public class CompanyControllerTest extends BaseCompanyTest{
     @Test
     @WithMockUser
     void shouldUpdateCompany () throws Exception {
-        Company company = getAnyCompany();
-        company.setId(1L);
-        UpdateCompanyCommand command = getAnyUpdateCompanyCommand();
-        String url = String.format("/api/v1/companies/%s", company.getId());
+        Provider provider = getAnyCompany();
+        provider.setId(1L);
+        UpdateProviderCommand command = getAnyUpdateCompanyCommand();
+        String url = String.format("/api/v1/companies/%s", provider.getId());
         String data = new ObjectMapper().writeValueAsString(command);
-        when(companyService.update(any(),any())).thenReturn(CompanyMapper.INSTANCE.mapToJson(company));
+        when(companyService.update(any(),any())).thenReturn(ProviderMapper.INSTANCE.mapToJson(provider));
         ResultActions result = mockMvc.perform(put(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)

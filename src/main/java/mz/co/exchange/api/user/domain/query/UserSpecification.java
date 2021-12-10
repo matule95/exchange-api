@@ -27,19 +27,6 @@ public class UserSpecification {
         return (root, criteriaQuery, criteriaBuilder)-> criteriaBuilder.and();
     }
 
-    public static Specification<User> findByDelegationName(String delegationName) {
-        return (root, criteriaQuery, criteriaBuilder)-> {
-            if (delegationName == null) return criteriaBuilder.and();
-            return criteriaBuilder.like(criteriaBuilder.lower(root.get("delegation").get("name")), "%" + delegationName.toLowerCase() + "%");
-        };
-    }
-
-    public static Specification<User> findByDepartmentName(String departmentName) {
-        return (root, criteriaQuery, criteriaBuilder)-> {
-            if (departmentName == null) return criteriaBuilder.and();
-            return criteriaBuilder.like(criteriaBuilder.lower(root.get("department").get("name")), "%" + departmentName.toLowerCase() + "%");
-        };
-    }
 
     public static Specification<User> findByName(String name){
         if(name==null) return null;

@@ -3,8 +3,6 @@ package mz.co.exchange.api.currency.presentation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import mz.co.exchange.api.company.domain.CompanyStatus;
-import mz.co.exchange.api.company.presentation.CompanyJson;
 import mz.co.exchange.api.currency.domain.CreateCurrencyCommand;
 import mz.co.exchange.api.currency.domain.UpdateCurrencyCommand;
 import mz.co.exchange.api.currency.service.CurrencyService;

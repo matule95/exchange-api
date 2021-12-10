@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
 
 @RestController
 @Api(tags = "Rate Management")
@@ -27,29 +28,29 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class RateController {
     private final RateService service;
-    private final HistoryService historyService;
+
+    @GetMapping("/")
+    @ApiOperation("Fetch All Rates")
+    public ResponseEntity<Page<RateJson>> getRates(@PageableDefault Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.fetchRates(pageable));
+    }
 
     @PostMapping
     @ApiOperation("Create a new rate")
-    public ResponseEntity<RateJson> createRate(@RequestBody @Valid CreateRateCommand command) {
+    public ResponseEntity<RateJson> createRate(@RequestBody @Valid CreateRateCommand command) throws SQLException {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(command));
     }
 
     @PatchMapping("/{id}")
     @ApiOperation("Update rate values")
-    public ResponseEntity<RateJson> updateDailyRate(@PathVariable Long id, @RequestBody @Valid UpdateRateCommand command) {
+    public ResponseEntity<RateJson> updateDailyRate(@PathVariable Long id, @RequestBody @Valid UpdateRateCommand command) throws SQLException {
         return ResponseEntity.status(HttpStatus.OK).body(service.update(command, id));
     }
 
-    @GetMapping("/{baseCurrencyId}/exchange")
-    @ApiOperation("Currency Rate Consult")
-    public ResponseEntity<ExchangeJson> getCurrencyRates(@PathVariable Long baseCurrencyId) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.getBaseCurrencyRates(baseCurrencyId));
+    @GetMapping("/{id}")
+    @ApiOperation("Get rate by id")
+    public ResponseEntity<RateJson> getRateById(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.fetchRate(id));
     }
 
-    @GetMapping("/{rateId}/history")
-    @ApiOperation("Currency Rate Consult")
-    public ResponseEntity<Page<HistoryJson>> getRateHistory(@PageableDefault Pageable pageable, @PathVariable Long rateId, HistoryQuery historyQuery) {
-        return ResponseEntity.status(HttpStatus.OK).body(historyService.getRateHistory(pageable, historyQuery, rateId));
-    }
 }
