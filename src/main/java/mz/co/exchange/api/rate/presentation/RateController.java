@@ -6,13 +6,11 @@ import lombok.RequiredArgsConstructor;
 import mz.co.exchange.api.currency.domain.CreateCurrencyCommand;
 import mz.co.exchange.api.currency.presentation.CurrencyJson;
 import mz.co.exchange.api.rate.domain.CreateRateCommand;
+import mz.co.exchange.api.rate.domain.UpdateRateCommand;
 import mz.co.exchange.api.rate.service.RateService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -27,5 +25,15 @@ public class RateController {
     @ApiOperation("Create a new rate")
     public ResponseEntity<RateJson> createRate(@RequestBody @Valid CreateRateCommand command) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(command));
+    }
+    @PutMapping("/{id}")
+    @ApiOperation("Update rate values")
+    public ResponseEntity<RateJson> updateDailyRate(@PathVariable Long id,@RequestBody @Valid UpdateRateCommand command) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.update(command,id));
+    }
+    @GetMapping("/exchange/{baseCurrencyId}")
+    @ApiOperation("Get currency exchange")
+    public ResponseEntity<?> getCurrencyRates(@PathVariable Long baseCurrencyId){
+        return ResponseEntity.status(HttpStatus.OK).body(service.getBaseCurrencyRates(baseCurrencyId));
     }
 }

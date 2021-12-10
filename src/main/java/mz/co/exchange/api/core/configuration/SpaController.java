@@ -13,7 +13,7 @@ public class SpaController {
   private static final String REGEX = "{_:^(?!index\\.html|api|swagger-ui|actuator|_nuxt|favicon\\.ico|sw\\.js).*$}";
   private static final String REGEX_VARIANT = REGEX + "/**";
 
-  @GetMapping(value = { REGEX, REGEX_VARIANT})
+  @GetMapping(value = { REGEX, REGEX_VARIANT," "})
   public String redirect(HttpServletRequest req) {
     LOG.info("URL {} entered directly into the Browser, redirecting...", req.getRequestURI());
     return "forward:/index.html";

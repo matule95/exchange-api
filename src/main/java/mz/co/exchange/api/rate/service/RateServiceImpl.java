@@ -7,11 +7,14 @@ import mz.co.exchange.api.currency.service.CurrencyServiceImpl;
 import mz.co.exchange.api.rate.domain.CreateRateCommand;
 import mz.co.exchange.api.rate.domain.Rate;
 import mz.co.exchange.api.rate.domain.RateMapper;
+import mz.co.exchange.api.rate.domain.UpdateRateCommand;
 import mz.co.exchange.api.rate.persistence.RateRepository;
 import mz.co.exchange.api.rate.presentation.RateJson;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +30,29 @@ public class RateServiceImpl implements RateService{
         rate.setTargetCurrency(currencyService.findById(command.getTargetCurrencyId()));
         return MAPPER.mapToJson(repository.save(rate));
     }
+
+    @Override
+    public List<Rate> getBaseCurrencyRates(Long baseCurrencyId) {
+        return repository.findByBaseCurrencyId(baseCurrencyId);
+    }
+
     public Rate findByBaseCurrencyAndTargetCurrency(Long baseCurrencyId,Long targetCurrencyId){
         Rate rate = repository.findByBaseCurrencyIdAndTargetCurrencyId(baseCurrencyId,targetCurrencyId);
         if(rate != null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return rate;
     }
+
+    @Override
+    public RateJson update(UpdateRateCommand command, Long id) {
+        Rate rate = findById(id);
+        MAPPER.updateModel(rate,command);
+        return MAPPER.mapToJson(repository.save(rate));
+    }
+
+    public Rate findById(Long id){
+        Rate rate = repository.findById(id).get();
+        if(rate == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return rate;
+    }
+
 }
