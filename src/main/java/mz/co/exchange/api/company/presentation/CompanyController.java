@@ -36,7 +36,7 @@ public class CompanyController {
 
 //    @GetMapping
 //    @ApiOperation("Fetch All Companies")
-//    public ResponseEntity<PageJson<CompanyJson>> getCompanies(CompanyQuery companyQuery, Pageable pageable) {
+//    public ResponseEntity<PageJson<CompanyJson>> getCompanies(HistoryQuery companyQuery, Pageable pageable) {
 //        return ResponseEntity.ok(PageJson.of(companyService.fetchCompanies(pageable,companyQuery)));
 //    }
 

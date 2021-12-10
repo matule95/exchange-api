@@ -1,10 +1,11 @@
-# This is the exchange api
+# Exchange API
 ## Features
 
-##### Consult Currency Rate - GET - /api/v1/rates/exchange/{baseCurrencyId} - `use 1 id to test after running` - No Auth needed
+##### Consultar câmbio de uma determinada moeday Rate - GET - /api/v1/rates/{baseCurrencyId}/exchange - `use o baseCurrencyId 1 para teste` - Não precisa autenticação
 
-##### Update Currency Rate - PATCH - /api/v1/rates/{id} - Auth needed
+##### Atualizar câmbios - PATCH - /api/v1/rates/{id} - Autenticação necessária
 
-##### Security using Spring Security
+##### Segurança da App usando Spring Security
 
-##### Controll Rate History - GET - /api/v1/rates/history/{id} - No Auth needed
+##### Verificar histórico de Câmbio - GET - /api/v1/rates/history/{rateId} - Não precisa Autenticação
+

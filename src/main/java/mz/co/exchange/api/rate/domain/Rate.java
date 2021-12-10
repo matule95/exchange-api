@@ -1,7 +1,9 @@
 package mz.co.exchange.api.rate.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import mz.co.exchange.api.currency.domain.Currency;
+import mz.co.exchange.api.history.domain.History;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -9,6 +11,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "rates")
@@ -30,4 +33,7 @@ public class Rate {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "rate")
+    private List<History> histories;
 }

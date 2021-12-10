@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import mz.co.exchange.api.currency.domain.Currency;
 import mz.co.exchange.api.currency.service.CurrencyService;
 import mz.co.exchange.api.currency.service.CurrencyServiceImpl;
+import mz.co.exchange.api.history.domain.History;
+import mz.co.exchange.api.history.service.HistoryService;
 import mz.co.exchange.api.rate.domain.CreateRateCommand;
 import mz.co.exchange.api.rate.domain.Rate;
 import mz.co.exchange.api.rate.domain.RateMapper;
@@ -16,8 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,13 +28,19 @@ public class RateServiceImpl implements RateService{
     private final CurrencyServiceImpl currencyService;
     private final RateRepository repository;
     private final RateMapper MAPPER = RateMapper.INSTANCE;
+    private final HistoryService historyService;
     @Override
-    public RateJson create(CreateRateCommand command) {
+    @Transactional
+    public RateJson create(CreateRateCommand command) throws SQLException {
         findByBaseCurrencyAndTargetCurrency(command.getBaseCurrencyId(), command.getTargetCurrencyId());
         Rate rate = MAPPER.mapToModel(command);
         rate.setBaseCurrency(currencyService.findById(command.getBaseCurrencyId()));
         rate.setTargetCurrency(currencyService.findById(command.getTargetCurrencyId()));
-        return MAPPER.mapToJson(repository.save(rate));
+        rate = repository.save(rate);
+        if(historyService.addHistory(new History(rate))) {
+            return MAPPER.mapToJson(rate);
+        }
+        throw new SQLException("Could not create new Rate");
     }
 
     @Override
@@ -52,10 +61,14 @@ public class RateServiceImpl implements RateService{
     }
 
     @Override
-    public RateJson update(UpdateRateCommand command, Long id) {
+    public RateJson update(UpdateRateCommand command, Long id) throws SQLException {
         Rate rate = findById(id);
         MAPPER.updateModel(rate,command);
-        return MAPPER.mapToJson(repository.save(rate));
+        rate = repository.save(rate);
+        if (historyService.addHistory(new History(rate))) {
+            return MAPPER.mapToJson(rate);
+        }
+        throw new SQLException("Could not update rate");
     }
 
     public Rate findById(Long id){
