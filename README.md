@@ -1,5 +1,5 @@
 # Exchange API
-## Features
+## Funcionalidades
 
 - ##### Consultar câmbio de uma determinada moeday Rate - GET - /api/v1/rates/{baseCurrencyId}/exchange - `use o baseCurrencyId 1 para teste` - Não precisa autenticação
 
@@ -14,6 +14,12 @@ Se adicionar o câmbio MZN-EUR de acordo com a variação diária do câmbio só
 - ##### Verificar histórico de Câmbio - GET - /api/v1/rates/{rateId}/history - Não precisa Autenticação
 Na verificação do histórico pode ainda filtrar os históricos do câmbio por datas `startDate e endDate -  dd-MM-YYYY` podendo colocar uma ou ambas datas. Sendo que, ao colocar apenas startDate irá buscar histórico de datas iguais ou superior e colocando apenas endDate igual ou inferior.
 
+- ##### Gerir Moedas, Câmbios, Provedores e Users(Adicional)
+
+Com consulta de câmbios existe a necessidade de adicionar mais informação que facilitam na melhor estruturação do projecto: sendo assim adicionados os módulos dos câmbios, provedores, moedas e utilizadores, onde cada um dos módulos possui o seu conjunto básico para o CRUD, sendo necessária a autenticação para acesso aos demais endpoints não mencionados acima.
+
+
+Foi usado o `flyway db` é uma ferramenta que se permite garantir a ordem e organização para os scripts SQL que são executados na base de dados, garantindo o controle de versão dos mesmos.
 
 ## Como executar?
 
