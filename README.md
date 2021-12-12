@@ -1,7 +1,7 @@
 # Exchange API
 ## Funcionalidades
 
-- ##### Consultar câmbio de uma determinada moeday Rate - GET - /api/v1/rates/{baseCurrencyId}/exchange - `use o baseCurrencyId 1 para teste` - Não precisa autenticação
+- ##### Consultar câmbio de uma determinada moeda - GET - /api/v1/rates/{baseCurrencyId}/exchange - `use o baseCurrencyId 1 para teste` - Não precisa autenticação
 
 A partir deste endpoint poderá consultar o câmbio de uma moeda específico, retornando os dados de acordo com o Sample Response partilhado.
 
@@ -32,4 +32,10 @@ A partir deste momento, seguindo corretamente os passos terá a aplicação corr
 NB:
 Poderá encontrar uma documentação mais interativa da API no endereço `http://localhost:8080/swagger-ui/`
 
+## Alternativa para executar
 
+- `cd exchange-api`
+- `docker build -f Dockerfile -t fnb/exchange-api .`
+- `docker run -d -p 8080:8080 fnb/exchange-api`
+
+Permite executar criando um container docker
