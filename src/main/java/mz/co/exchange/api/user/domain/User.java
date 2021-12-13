@@ -42,8 +42,6 @@ public class User extends AbstractAggregateRoot<User> implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    private String responsibility;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 

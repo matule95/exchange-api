@@ -16,7 +16,6 @@ public class UserJson {
     private String username;
     private UserStatus userStatus;
     private UserRole role;
-    private String responsibility;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

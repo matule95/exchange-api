@@ -5,7 +5,6 @@ CREATE TABLE users (
     username VARCHAR(256) NOT NULL,
     email VARCHAR(256) NOT NULL UNIQUE,
     role VARCHAR(32) NOT NULL,
-    responsibility VARCHAR(32),
     user_status VARCHAR(256) DEFAULT 'ACTIVE' NOT NULL,
     deleted_at TIMESTAMP NULL,
     password VARCHAR(256) NOT NULL,
