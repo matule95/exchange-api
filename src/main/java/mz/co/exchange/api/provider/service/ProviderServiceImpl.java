@@ -1,7 +1,6 @@
 package mz.co.exchange.api.provider.service;
 
 import lombok.RequiredArgsConstructor;
-import mz.co.exchange.api.currency.domain.Currency;
 import mz.co.exchange.api.provider.domain.*;
 import mz.co.exchange.api.provider.domain.query.ProviderQuery;
 import mz.co.exchange.api.provider.domain.query.ProviderQueryGateway;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor

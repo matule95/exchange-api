@@ -2,7 +2,6 @@ package mz.co.exchange.api.provider.presentation;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import mz.co.exchange.api.provider.domain.CompanyStatus;
 
 import java.time.LocalDateTime;
 

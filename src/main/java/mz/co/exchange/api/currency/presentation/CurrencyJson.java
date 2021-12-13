@@ -1,7 +1,6 @@
 package mz.co.exchange.api.currency.presentation;
 
 import lombok.Data;
-import mz.co.exchange.api.provider.domain.Provider;
 
 import java.time.LocalDateTime;
 

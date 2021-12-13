@@ -2,7 +2,6 @@ package mz.co.exchange.api.rate.service;
 
 import lombok.RequiredArgsConstructor;
 import mz.co.exchange.api.currency.domain.Currency;
-import mz.co.exchange.api.currency.service.CurrencyService;
 import mz.co.exchange.api.currency.service.CurrencyServiceImpl;
 import mz.co.exchange.api.history.domain.History;
 import mz.co.exchange.api.history.service.HistoryService;
@@ -11,7 +10,6 @@ import mz.co.exchange.api.rate.domain.Rate;
 import mz.co.exchange.api.rate.domain.RateMapper;
 import mz.co.exchange.api.rate.domain.UpdateRateCommand;
 import mz.co.exchange.api.rate.persistence.RateRepository;
-import mz.co.exchange.api.rate.presentation.CurrencyRateJson;
 import mz.co.exchange.api.rate.presentation.ExchangeJson;
 import mz.co.exchange.api.rate.presentation.RateJson;
 import org.springframework.data.domain.Page;
@@ -21,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 @Service

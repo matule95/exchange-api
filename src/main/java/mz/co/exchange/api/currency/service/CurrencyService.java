@@ -1,7 +1,6 @@
 package mz.co.exchange.api.currency.service;
 
 import mz.co.exchange.api.currency.domain.CreateCurrencyCommand;
-import mz.co.exchange.api.currency.domain.Currency;
 import mz.co.exchange.api.currency.domain.UpdateCurrencyCommand;
 import mz.co.exchange.api.currency.presentation.CurrencyJson;
 import org.springframework.data.domain.Page;
