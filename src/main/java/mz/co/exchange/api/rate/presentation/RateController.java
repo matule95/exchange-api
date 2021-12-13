@@ -29,7 +29,7 @@ import java.sql.SQLException;
 public class RateController {
     private final RateService service;
 
-    @GetMapping("/")
+    @GetMapping
     @ApiOperation("Fetch All Rates")
     public ResponseEntity<Page<RateJson>> getRates(@PageableDefault Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(service.fetchRates(pageable));
@@ -37,7 +37,7 @@ public class RateController {
 
     @PostMapping
     @ApiOperation("Create a new rate")
-    public ResponseEntity<RateJson> createRate(@RequestBody @Valid CreateRateCommand command) throws SQLException {
+    public ResponseEntity<RateJson> createRate(@RequestBody @Valid CreateRateCommand command) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(command));
     }
 

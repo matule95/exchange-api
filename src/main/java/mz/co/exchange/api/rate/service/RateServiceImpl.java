@@ -33,7 +33,7 @@ public class RateServiceImpl implements RateService{
     private final HistoryService historyService;
     @Override
     @Transactional
-    public RateJson create(CreateRateCommand command) throws SQLException {
+    public RateJson create(CreateRateCommand command) throws RuntimeException {
         findByBaseCurrencyAndTargetCurrency(command.getBaseCurrencyId(), command.getTargetCurrencyId());
         Rate rate = MAPPER.mapToModel(command);
         rate.setBaseCurrency(currencyService.findById(command.getBaseCurrencyId()));
@@ -42,7 +42,7 @@ public class RateServiceImpl implements RateService{
         if(historyService.addHistory(new History(rate))) {
             return MAPPER.mapToJson(rate);
         }
-        throw new SQLException("Could not create new Rate");
+        throw new RuntimeException("Could not create new Rate");
     }
 
     @Override
@@ -59,19 +59,19 @@ public class RateServiceImpl implements RateService{
 
     public Rate findByBaseCurrencyAndTargetCurrency(Long baseCurrencyId,Long targetCurrencyId){
         Rate rate = repository.findByBaseCurrencyIdAndTargetCurrencyId(baseCurrencyId,targetCurrencyId);
-        if(rate != null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if(rate != null) throw new ResponseStatusException(HttpStatus.FOUND);
         return rate;
     }
 
     @Override
-    public RateJson update(UpdateRateCommand command, Long id) throws SQLException {
+    public RateJson update(UpdateRateCommand command, Long id) throws RuntimeException {
         Rate rate = findById(id);
         MAPPER.updateModel(rate,command);
         rate = repository.save(rate);
         if (historyService.addHistory(new History(rate))) {
             return MAPPER.mapToJson(rate);
         }
-        throw new SQLException("Could not update rate");
+        throw new RuntimeException("Could not update rate");
     }
 
     @Override

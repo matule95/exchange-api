@@ -12,9 +12,9 @@ import java.sql.SQLException;
 
 
 public interface RateService {
-    RateJson create(CreateRateCommand command) throws SQLException;
+    RateJson create(CreateRateCommand command);
     ExchangeJson getBaseCurrencyRates(Long baseCurrencyId);
-    RateJson update(UpdateRateCommand command, Long id) throws SQLException;
+    RateJson update(UpdateRateCommand command, Long id);
     RateJson fetchRate(Long rateId);
     Page<RateJson> fetchRates(Pageable pageable);
 }
