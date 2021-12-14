@@ -35,7 +35,7 @@ Poderá encontrar uma documentação mais interativa da API no endereço `http:/
 ## Alternativa para executar
 
 - `cd exchange-api`
-- `docker build -f Dockerfile -t fnb/exchange-api .`
-- `docker run -d -p 8080:8080 fnb/exchange-api`
+- `docker build -f Dockerfile -t api/exchange-api .`
+- `docker run -d -p 8080:8080 api/exchange-api`
 
 Permite executar criando um container docker
