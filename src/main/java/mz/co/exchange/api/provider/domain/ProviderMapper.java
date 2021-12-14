@@ -23,8 +23,6 @@ public abstract class ProviderMapper {
 
     public abstract void updateModel(@MappingTarget Provider provider, UpdateProviderCommand command);
 
-    public abstract  void setStatusModel(@MappingTarget Provider provider, CompanyStatus status);
-
     public abstract void cloneModel(@MappingTarget Provider provider, Provider providerSource);
 
     @InheritInverseConfiguration

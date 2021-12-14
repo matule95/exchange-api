@@ -20,6 +20,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -44,9 +46,15 @@ public class RateServiceImpl implements RateService{
 
     @Override
     public ExchangeJson getBaseCurrencyRates(Long baseCurrencyId) {
+        ZonedDateTime now = ZonedDateTime.now();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, dd MMM yyyy HH:mm:ss Z");
+
+        String formatDateTime = now.format(formatter);
+
         ExchangeJson exchangeJson = new ExchangeJson();
         Currency currency = currencyService.findById(baseCurrencyId);
-        exchangeJson.setDateTime(LocalDateTime.now());
+        exchangeJson.setDateTime(formatDateTime);
         exchangeJson.setProvider(currency.getProvider().getName());
         exchangeJson.setBaseCurrency(currency.getIsoCode());
         exchangeJson.setResult("success");
