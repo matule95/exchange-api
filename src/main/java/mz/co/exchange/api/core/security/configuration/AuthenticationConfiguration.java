@@ -47,6 +47,7 @@ public class AuthenticationConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
                 .antMatchers(HttpMethod.PATCH, "/api/v1/auth").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/currencies/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/rates/{baseCurrencyId}/exchange").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/rates/{rateId}/history").permitAll()
                 .antMatchers("/api/v1/**").authenticated()
